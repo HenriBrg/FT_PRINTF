@@ -1,0 +1,68 @@
+Printf Conversions
+
+% [flags][width][.precision][size]type
+                                  ^^^^
+
+s --> Affiche un string
+Exemple : printf("%s", "Hello")
+
+
+
+S --> Affiche un string composé de wchar_t
+setlocale(LC_ALL, "");
+Exemple : printf("%S", L"🤗 💯 🌍 🚀 🔴 Emote")
+
+
+
+p --> Pointeur de la variable, affiché en hexa
+var *s;
+Exemple : printf("%p", s)
+
+
+
+d ou D--> Affiche un int
+Exemple : printf("%d", 42)
+
+
+i --> Affiche un int mais gère aussi le binaire  / hexa si précéde par 0 (binaire) ou par 0x (hexa)
+Exemple : printf("%i", )
+// (+ d'infos : https://stackoverflow.com/questions/1893490/what-is-the-difference-between-conversion-specifiers-i-and-d-in-formatted-io-f)
+
+
+
+o --> Converti en base octale (8) => 42 devient 52
+Exemple : printf("%d", 42) ==> Affichera 52 (car 42 == 52 en base 8)
+
+
+
+O --> Indique le remplissage avec des 0
+Exemple : printf("%05d", -7) ==> Affichera -0007 (le 5 correspond au nombre total de chiffre ?)
+
+
+
+u ou U--> Affiche un unsigned int
+Exemple : printf("%u", 42) ==> Affichera 42
+
+
+x --> Affiche un unsigned int en hexa (mininuscule)
+Exemple : printf("%x", 17) ==> Affichera 1e
+
+
+
+X --> Affiche un unsigned int en hexa (majuscule)
+Exemple : printf("%x", 17) ==> Affichera 1E
+
+
+
+c --> Converti en char
+Exemple : printf("%c", 'a')
+
+
+
+C --> Synonyme de lc, converti en wint_t permettant d'afficher ä, ö,...
+Exemple :  printf("%C %C %C\n", L'ä', L'ö', L'ü')
+
+
+
+%% --> Permet d'afficher le symbole % (donc sans s'attendre à une variable)
+Exemple : printf("%%%d", 42) ==> Affichera %42

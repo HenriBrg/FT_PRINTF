@@ -1,0 +1,24 @@
+Les Flags de Printf
+
+% [flags][width][.precision][size]type
+   ^^^^^
+
+
+0 ===> Remplie l'espace restant par des 0 (42 prend 2 espace, il y aura donc 8 zéros)
+Exemple : printf(" %010d \n", number) ==> 0000000042
+
+
+- ===> Décale le résultat à gauche (left-justify)
+Exemple : printf(" %-100d \n", number); (avec un cat -e)
+
+
++ ===> Affiche un + ou - avant l'int passé en paramètre, selon son signe
+Exemple : printf(" %+d \n", -42)
+
+
+Espace ===> Affiche un espace avant si la valeur est numerique positive, sinon affiche un -
+Exemple : printf(" % d \n", 42) ==> [espace]42
+          printf(" % d \n", -42) ==> -42
+
+# ===> Ajoute un préfixe mais il y a plusieurs cas d'utilisations
+Exemple : affichage précédé de 0, 0x ou 0X avec les types respectifs o, x ou X

@@ -1,0 +1,12 @@
+Ordre de printf :
+
+% [flags][width][.precision][size]type
+
+
+--------------------------------------------------------------------------------
+
+Liens utiles : http://www.linux-france.org/prj/embedded/sdcc/sdcc_course.formatted_io.html
+Liens utiles : https://docs.microsoft.com/fr-fr/cpp/c-runtime-library/format-specification-syntax-printf-and-wprintf-functions?view=vs-2019
+Liens utiles : https://www.lix.polytechnique.fr/~liberti/public/computing/prog/c/C/FUNCTIONS/format.html
+
+Pas mal d'exemple : https://www.ltam.lu/cours-c/prg-c42.htm
