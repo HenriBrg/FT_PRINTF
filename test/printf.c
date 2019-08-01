@@ -2,6 +2,6 @@
 
 int main()
 {
-  printf("%10s\n", "Hello");
-  return (0);
+printf("%#d\n", 42);
+return (0);
 }

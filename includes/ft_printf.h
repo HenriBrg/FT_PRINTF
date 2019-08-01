@@ -12,6 +12,7 @@ Approche possible pour gérer les types de variable tous en même temps
 
 # include <locale.h> // Pour tester les symboles, etc ...
 # include <stdarg.h>
+# include <limits.h>
 
 # include "./libft.h"
 

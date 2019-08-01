@@ -32,7 +32,6 @@ static void dispatch(t_printf *tab)
   {
     handleDisplay(tab);
     resetConfig(tab);
-    printf("Config reset\n");
   }
 }
 
@@ -68,7 +67,7 @@ int ft_printf(const char *format, ...)
 
 int main()
 {
-  ft_printf("Hello%+lld %10");
+  ft_printf("");
   printf("\n");
   return (0);
 }
@@ -104,22 +103,4 @@ ft_printf("Hello%.10ll"); ll 1 et precision 10
 ft_printf("Hello%+ll"); ll 1 et plus 1
 
 ft_printf("Hello%+lld %10"); Config 1 : plus 1, ll 1 et Config 2 : width 10
-*/
-
-/*
-
-ft_printf("value: %d\n", i);
-ft_printf("%s, %s!\n", "Hello", "world");
-ft_printf("Hello World!\n");
-ft_printf("%s", "This is ");
-ft_printf("%.*s\n", 9, "ft_printf and ft_dprintf");
-ft_printf("%d\n", 123);
-ft_printf("%05d\n", 42);
-ft_printf("%+09d\n", 42);
-ft_printf("%u\n", UINT_MAX);
-ft_printf("%#b\n", 256);
-ft_printf("%#o\n", 1039);
-ft_printf("%#X\n", 16417188);
-ft_printf("%p\n", &i);
-
 */

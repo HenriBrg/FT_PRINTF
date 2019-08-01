@@ -1,24 +1,55 @@
-Les Flags de Printf
+                              ===================
+                              Les Flags de Printf
+                              ===================
 
-% [flags][width][.precision][size]type
-   ^^^^^
-
-
-0 ===> Remplie l'espace restant par des 0 (42 prend 2 espace, il y aura donc 8 zéros)
-Exemple : printf(" %010d \n", number) ==> 0000000042
+                      % [flags][width][.precision][size]type
+                         ^^^^^
 
 
-- ===> Décale le résultat à gauche (left-justify)
-Exemple : printf(" %-100d \n", number); (avec un cat -e)
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '0' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Remplie l'espace restant par des 0
+Si pas de nombre (tab->width) après le '0', rien de change
+
+Exemple 1 : printf(" %010d \n", 42) ==> 0000000042
+            (42 prend 2 espace, il y aura donc 8 zéros)
 
 
-+ ===> Affiche un + ou - avant l'int passé en paramètre, selon son signe
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '-' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Décale le résultat à gauche (left-justify) selon le nombre associé
+ET selon la taille de l'output du %
+
+Exemple 1 : printf("aa%-4daaa\n", 42); ==> aa42  aaa$
+            (42 = taille de 2) et on a -4, donc il reste 2 places qui
+            seront mise à droite de l'output (ce qui donne un left-justify)
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '+' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+S'il s'agit d'un type signé (donc int uniquement je suppose)
+Affiche un + ou - avant l'int passé en paramètre, selon son signe
 Exemple : printf(" %+d \n", -42)
 
 
-Espace ===> Affiche un espace avant si la valeur est numerique positive, sinon affiche un -
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag ' ' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Affiche un espace avant si la valeur est un int positif, sinon affiche un -
+Son effet est annulé si l'on trouve un '+' ()
 Exemple : printf(" % d \n", 42) ==> [espace]42
           printf(" % d \n", -42) ==> -42
 
-# ===> Ajoute un préfixe mais il y a plusieurs cas d'utilisations
-Exemple : affichage précédé de 0, 0x ou 0X avec les types respectifs o, x ou X
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '#' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Ajoute un préfixe :
+
+Avec les convertisseurs o x X
+#o : 0
+#x : 0x
+#X : 0X
+
+Avec les convertisseurs c d i u s, il est ignoré
+
+Exemple : printf("%#o\n", 42); ===> 052
+          printf("%#d\n", 42); ===> 42 + warning # ignoré
