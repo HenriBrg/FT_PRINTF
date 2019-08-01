@@ -7,4 +7,5 @@
 void handleDisplay(t_printf *tab)
 {
   (void)tab;
+  printf("\nAffichage à gérer\n");
 }

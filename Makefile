@@ -11,6 +11,10 @@ OBJS = ${SRCS:.c=.o}
 
 CFLAGS = -Wall -Wextra -Werror
 
+ifndef VERBOSE
+.SILENT:
+endif
+
 all: $(NAME)
 
 .c.o:

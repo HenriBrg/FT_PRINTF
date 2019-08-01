@@ -53,12 +53,12 @@ typedef struct s_printf {
   int     j;
   int     z;
 
-  int    flags;
   int    width;
   int    precision;
 }              t_printf;
 
 void setConfig(t_printf *tab);
+void showConfig(t_printf *tab);
 void handleDisplay(t_printf *tab);
 
 #endif

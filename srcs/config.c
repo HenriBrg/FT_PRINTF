@@ -6,65 +6,145 @@
 
 
 /*
-** Pour gérer ça : printf("%+09d\n", 42); ===> +00000042
+** Pour gérer : 0 - +  # et ' ' (espace)
+** Exemple : printf("%+09d\n", 42); ===> +00000042
 */
 
-static void setFlags(t_printf *tab)
+static int setFlags(t_printf *tab)
 {
   if (tab->format[tab->i] == '-')
-    tab->minus = 1;
+  {
+    tab->i++;
+    return ((tab->minus = 1));
+  }
   else if (tab->format[tab->i] == '+')
-    tab->plus = 1;
+  {
+    tab->i++;
+    return ((tab->plus = 1));
+  }
   else if (tab->format[tab->i] == ' ')
-    tab->space = 1;
+  {
+    tab->i++;
+    return ((tab->space = 1));
+  }
   else if (tab->format[tab->i] == '0')
-    tab->zero = 1;
+  {
+    tab->i++;
+    return ((tab->zero = 1));
+  }
   else if (tab->format[tab->i] == '#')
-    tab->hash = 1;
+  {
+    tab->i++;
+    return ((tab->hash = 1));
+  }
+  return (0);
 }
+
 
 /*
 ** Pour gérer ça : printf("%10d\n", 12); ===> --------12 (tiret = espace)
 */
-static void setWidth(t_printf *tab)
+
+static int setWidth(t_printf *tab)
 {
-  if (tab->format[tab->i] != '0' && ft_isdigit(tab->format[tab->i]))
+  // Faut-il gérer les espaces aussi ? tab->space ?
+
+  if (ft_isdigit(tab->format[tab->i]))
+  {
     tab->width = ft_atoi(&tab->format[tab->i]);
+    tab->i += ft_strlen(ft_itoa(tab->width));
+    return (1);
+  }
+  return (0);
 }
 
 /*
-**  Pour gérer ça : printf("%.10s\n", "abcdefghijklmn"); ==> abcdefghij
+**  setPrecision() gère ça : printf("%.10s\n", "abcdefghijklmn"); ==> abcdefghij
 */
-static void setPrecision(t_printf *tab)
+
+static int setPrecision(t_printf *tab)
 {
-  if (tab->format[tab->i] != '.' )
-    tab->precision = ft_atoi(&tab->format[tab->i + 1]);
+  if (tab->format[tab->i] == '.' )
+  {
+    tab->i++;
+    tab->precision = ft_atoi(&tab->format[tab->i]);
+    tab->i += ft_strlen(ft_itoa(tab->precision));
+    return (1);
+  }
+  return (0);
 }
 
 /*
-**  Pour gérer ça : char c = 0xf0; printf("%hhx", c);
-
+**  setSize() gére ça : char c = 0xf0; printf("%hhx", c);
 */
-static void setSize(t_printf *tab)
+
+
+static int setSize(t_printf *tab)
 {
-  if (tab->format[tab->i] == 'h' )
-    tab->h = 1;
-  else if (tab->format[tab->i] == 'h' && tab->format[tab->i + 1] == 'h' )
-    tab->hh = 1;
-  else if (tab->format[tab->i] != 'l' )
-    tab->l = 1;
-  else if (tab->format[tab->i] != 'l' && tab->format[tab->i + 1] != 'l')
-    tab->ll = 1;
-  else if (tab->format[tab->i] != 'j' )
-    tab->j = 1;
-  else if (tab->format[tab->i] != 'z' )
-    tab->z = 1;
+  if (tab->format[tab->i] == 'h' && tab->format[tab->i + 1] == 'h')
+  {
+    tab->i += 2;
+    return ((tab->hh = 1));
+  }
+  else if (tab->format[tab->i] == 'l' && tab->format[tab->i + 1] == 'l')
+  {
+    tab->i += 2;
+    return ((tab->ll = 1));
+  }
+  else if (tab->format[tab->i] == 'h')
+  {
+    tab->i++;
+    return ((tab->h = 1));
+  }
+  else if (tab->format[tab->i] == 'l')
+  {
+    tab->i++;
+    return ((tab->l = 1));
+  }
+  else if (tab->format[tab->i] == 'j')
+  {
+    tab->i++;
+    return ((tab->j = 1));
+  }
+  else if (tab->format[tab->i] == 'z')
+  {
+    tab->i++;
+    return ((tab->z = 1));
+  }
+  return (0);
 }
+
+
+void showConfig(t_printf *tab)
+{
+  printf("\n");
+  printf("Format    : %s\n", tab->format    );
+  printf("Format[i] : %c\n", tab->format[tab->i]);
+  printf("i         : %d\n", tab->i         );
+  printf("minus     : %d\n", tab->minus     );
+  printf("plus      : %d\n", tab->plus      );
+  printf("space     : %d\n", tab->space     );
+  printf("zero      : %d\n", tab->zero      );
+  printf("hash      : %d\n", tab->hash      );
+  printf("h         : %d\n", tab->h         );
+  printf("hh        : %d\n", tab->hh        );
+  printf("l         : %d\n", tab->l         );
+  printf("ll        : %d\n", tab->ll        );
+  printf("j         : %d\n", tab->j         );
+  printf("z         : %d\n", tab->z         );
+  printf("width     : %d\n", tab->width     );
+  printf("precision : %d\n", tab->precision );
+}
+
 
 void setConfig(t_printf *tab)
 {
-  setFlags(tab);
-  setWidth(tab);
-  setPrecision(tab);
-  setSize(tab);
+  if (setFlags(tab) == 1)
+    return ;
+  if (setWidth(tab) == 1)
+    return ;
+  if (setPrecision(tab) == 1)
+    return ;
+  if (setSize(tab) == 1)
+    return ;
 }

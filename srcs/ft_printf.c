@@ -11,30 +11,28 @@ static void resetConfig(t_printf *tab)
   tab->space     = 0;
   tab->zero      = 0;
   tab->hash      = 0;
-  tab->flags     = 0;
-  tab->width     = 0;
-  tab->precision = 0;
   tab->h         = 0;
   tab->hh        = 0;
   tab->l         = 0;
   tab->ll        = 0;
   tab->j         = 0;
   tab->z         = 0;
+  tab->width     = 0;
+  tab->precision = 0;
 }
 
 static void dispatch(t_printf *tab)
 {
-  while (tab->format[tab->i] != '\0')
+  tab->i++;
+  while (tab->i < (int)ft_strlen(tab->format) &&
+         ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
+    setConfig(tab);
+  showConfig(tab);
+  if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
   {
-    if (ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
-      setConfig(tab);
-    else if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
-    {
-      handleDisplay(tab);
-      resetConfig(tab);
-      tab->i++;
-    }
-    tab->i++;
+    handleDisplay(tab);
+    resetConfig(tab);
+    printf("Config reset\n");
   }
 }
 
@@ -59,24 +57,54 @@ int ft_printf(const char *format, ...)
     else if (tab->format[tab->i] == '%')
       dispatch(tab);
     else
-      tab->returnSize += write(1, &tab->format[tab->i++], 1);
+    {
+      write(1, &tab->format[tab->i], 1);
+      tab->returnSize += 1;
+      tab->i++;
+    }
   }
-  return (tab->i);
+  return (tab->returnSize);
 }
-
-
-
-
-
-
-
-
 
 int main()
 {
-  ft_printf("He%llo");
+  ft_printf("Hello%+lld %10");
+  printf("\n");
   return (0);
 }
+
+/* TEST du parsing :
+
+ft_printf("Hello%"); aucune config
+ft_printf("Hello%5"); width 5
+ft_printf("Hello%05"); zero 1 et width 5
+ft_printf("Hello%+5"); plus 1 et width 5
+ft_printf("Hello%-5"); minus 1 et width 5
+ft_printf("Hello% 5"); space 1 et width 5
+ft_printf("Hello%#5"); hash 1 et width 5
+
+ft_printf("Hello%.10"); precision 10
+ft_printf("Hello%-15.10"); minus 1 width 15 precision 10
+
+ft_printf("Hello%hh"); hh 1
+ft_printf("Hello%ll"); ll 1
+ft_printf("Hello%h"); h 1
+ft_printf("Hello%l"); l 1
+ft_printf("Hello%j"); j 1
+ft_printf("Hello%z"); z 1
+
+ft_printf("Hello%#hh"); hash 1 et hh 1
+ft_printf("Hello%#ll"); hash 1 et ll 1
+ft_printf("Hello%#h"); hash 1 et h 1
+ft_printf("Hello%#l"); hash 1 et l 1
+ft_printf("Hello%#j"); hash 1 et j 1
+ft_printf("Hello%#z"); hash 1 et z 1
+
+ft_printf("Hello%.10ll"); ll 1 et precision 10
+ft_printf("Hello%+ll"); ll 1 et plus 1
+
+ft_printf("Hello%+lld %10"); Config 1 : plus 1, ll 1 et Config 2 : width 10
+*/
 
 /*
 
