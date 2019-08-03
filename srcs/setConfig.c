@@ -103,9 +103,11 @@ void setConfig(t_printf *tab)
 {
   if (setFlags(tab) == 1)
   {
-    // Hiérarchie des flags ?
-    // if (fab->plus)
-  	// 	fab->space = 0;
+    // Hiérarchie des flags
+    if (tab->minus)
+      tab->zero = 0;
+    if (tab->plus)
+      tab->space = 0;
     return ;
   }
   if (setWidth(tab) == 1)
@@ -116,7 +118,7 @@ void setConfig(t_printf *tab)
   {
     // A voir si nécessaire :
     // while (ft_strchr("hljz", tab->format[tab->i]))
-		// 	tab->i++;
+		// 	tab->i++; // Ca serait pour gérer si doublon : exemple : %hhhhd
     return ;
   }
   // L'idée c'est de validé la config, faut pas qu'il y ai 2 fois hh hh par exemple, ou autre forme de doublons, etc ...

@@ -1,0 +1,19 @@
+                            =================
+                            La size de Printf
+                            =================
+
+% [flags][width][.precision][size]type
+                             ^^^^
+
+hh	Convert a variable of type char to integer and print
+h	  Convert a variable of type short to integer and print
+l	  For integers, a variable of type long is expected.
+ll	For integers, a variable of type long long is expected.
+L	  For floating point, a variable of type long double is expected.
+z	  For integers, an argument is expected of type size_t.
+j   For integers, an argument is expected of type intmax_t
+
+
++ d'infos : Modificateurs de longueurs :
+(voir http://manpagesfr.free.fr/man/man3/printf.3.html
+et https://riptutorial.com/fr/c/example/29297/modificateurs-de-longueur)

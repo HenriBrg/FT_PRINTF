@@ -13,6 +13,7 @@ Approche possible pour gérer les types de variable tous en même temps
 # include <locale.h> // Pour tester les symboles, etc ...
 # include <stdarg.h>
 # include <limits.h>
+# include <stdint.h>
 
 # include "./libft.h"
 
@@ -30,6 +31,7 @@ typedef struct s_printf {
 
   va_list args;
   char    *format;
+  char    *output;
 
   int     i;
   int     returnSize;
@@ -60,6 +62,8 @@ typedef struct s_printf {
 
 void setConfig(t_printf *tab);
 void showConfig(t_printf *tab);
-void handleDisplay(t_printf *tab);
+void handleDisplay(t_printf *tab, char c);
+char *ft_intmaxt_toa_base(char *base, intmax_t n);
+char *ft_Uintmaxt_toa_base(char *base, uintmax_t n);
 
 #endif

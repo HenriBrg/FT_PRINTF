@@ -1,0 +1,32 @@
+                              ===================
+                              La width de Printf
+                              ===================
+
+                      % [flags][width][.precision][size]type
+                                ^^^^^
+
+Par défaut la taille du champ (width) est la plus petite requise
+
+L'argument width contrôle la taille minimum de caractères à afficher
+
+Si le nombre de caractères dans la valeur de sortie est inférieur à la width spécifiée,
+des espaces sont ajoutés à gauche ou à droite des valeurs, selon que l’indicateur d’alignement à gauche ( - )
+est spécifié ou non, jusqu’à ce que la largeur minimale soit atteinte.
+
+Si width est préfixé par 0, des zéros non significatifs sont ajoutés aux conversions
+en entiers ou en nombres à virgule flottante jusqu’à ce que la largeur minimale (width) soit atteinte.
+
+La spécification de largeur ne provoque JAMAIS la troncature d’une valeur.
+
+
+Pour le cas des asterisque (*), c'est en bonus (idem pour l'* en précision)
+
+Exemple :
+
+
+printf("Here is a number-%4d-and a-%10s-word.\n", 5, "little");
+Output : "Here is a number-   5-and a-    little-word."
+
+
+printf("%0*f", 5, 3);
+Output : 00003

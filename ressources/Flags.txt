@@ -8,6 +8,8 @@
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '0' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+Champ d'application :
+
 Remplie l'espace restant par des 0
 Si pas de nombre (tab->width) après le '0', rien de change
 
@@ -15,7 +17,12 @@ Exemple 1 : printf(" %010d \n", 42) ==> 0000000042
             (42 prend 2 espace, il y aura donc 8 zéros)
 
 
+Si 0 et - apparaissent, 0 est ignoré
+Si il y a une précision (ex : .5), et que le la variable est un entier (i, u, x, X, o, d) le 0 est ignoré
+
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '-' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Champ d'application : TOUT
 
 Décale le résultat à gauche (left-justify) selon le nombre associé
 ET selon la taille de l'output du %
@@ -27,6 +34,8 @@ Exemple 1 : printf("aa%-4daaa\n", 42); ==> aa42  aaa$
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '+' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+Champ d'application : entier (i, u, x, X, o, d)
+
 S'il s'agit d'un type signé (donc int uniquement je suppose)
 Affiche un + ou - avant l'int passé en paramètre, selon son signe
 Exemple : printf(" %+d \n", -42)
@@ -34,22 +43,25 @@ Exemple : printf(" %+d \n", -42)
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag ' ' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-Affiche un espace avant si la valeur est un int positif, sinon affiche un -
-Son effet est annulé si l'on trouve un '+' ()
+Champ d'application : entier (i, u, x, X, o, d)
+
+Affiche un espace avant si la valeur est positive, sinon le '-' naturel reste
+
 Exemple : printf(" % d \n", 42) ==> [espace]42
           printf(" % d \n", -42) ==> -42
 
+Son effet est annulé si l'on trouve un '+' ()
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '#' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Ajoute un préfixe :
 
-Avec les convertisseurs o x X
+Champ d'application : avec les convertisseurs o x X
 #o : 0
 #x : 0x
 #X : 0X
 
-Avec les convertisseurs c d i u s, il est ignoré
+Avec les convertisseurs c d i u s, il est IGNORE
 
 Exemple : printf("%#o\n", 42); ===> 052
           printf("%#d\n", 42); ===> 42 + warning # ignoré

@@ -1,0 +1,29 @@
+                            ======================
+                            La précision de Printf
+                            ======================
+
+                  % [flags][width][.precision][size]type
+                                   ^^^^^^^^^^
+
+Il se compose d’un point (.) suivi d’un entier décimal non négatif dont l'effet varie selon le type de conversion
+
+Contrairement à la spécification de largeur, la spécification de précision peut entraîner la troncation de la valeur de sortie
+
+Par défaut elle est à 1
+
+Impact sur le type de conversions :
+
+d i o u x X : La précision indiquera le nombre minimal de caractère à afficher
+              Si le nombre de chiffres dans l’argument est inférieur à precision,
+              la valeur de sortie est remplie à gauche de zéros.
+              La valeur n’est pas tronquée quand le nombre de chiffres dépasse la precision
+
+s S : La précision indique le nombre maximal de caractères à imprimer.
+      Les caractères au-delà de precision ne sont pas imprimés.
+
+c, C :	La précision n’a aucun effet
+
+________________________________________________________________________________
+
+Exemple : printf( "%.0d", 0); /* No characters output */
+Exemple : printf("%.9s\n", "ft_printf and ft_dprintf") ==>  "ft_printf"

@@ -6,6 +6,7 @@
 
 static void resetConfig(t_printf *tab)
 {
+  tab->output    = 0;
   tab->minus     = 0;
   tab->plus      = 0;
   tab->space     = 0;
@@ -18,20 +19,22 @@ static void resetConfig(t_printf *tab)
   tab->j         = 0;
   tab->z         = 0;
   tab->width     = 0;
-  tab->precision = 0;
+  tab->precision = 1;
 }
 
 static void dispatch(t_printf *tab)
 {
-  tab->i++;
+  tab->i++; // On saute le symbole %
   while (tab->i < (int)ft_strlen(tab->format) &&
          ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
     setConfig(tab);
-  showConfig(tab);
+  // showConfig(tab);
   if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
   {
-    handleDisplay(tab);
+    handleDisplay(tab, tab->format[tab->i]);
+    tab->returnSize += (int)ft_strlen(tab->output);
     resetConfig(tab);
+    tab->i++; // On saute le symbole de conversion
   }
 }
 
@@ -67,12 +70,63 @@ int ft_printf(const char *format, ...)
 
 int main()
 {
-  ft_printf("");
-  printf("\n");
+  int                    a = -42;
+  unsigned int           b = 42;
+  long int               c = -100;
+  unsigned long int      d = 100;
+  long long int          e = -200;
+  unsigned long long int f = 200;
+  short                  g = -20;
+  size_t                 h = 77;
+  intmax_t               i = -3000000000;
+  char                j[2] = "42";
+
+  printf("---------- FT_PRINTF -----------\n");
+  ft_printf("INT    via %%d   : %d", a);
+  ft_printf("UINT   via %%u   : %u", b);
+  ft_printf("LINT   via %%ld  : %ld", c);
+  ft_printf("ULINT  via %%lu  : %lu", d);
+  ft_printf("LLINT  via %%lld : %lld", e);
+  ft_printf("ULLINT via %%llu : %llu", f);
+  ft_printf("SHORT  via %%hd  : %hd", g);
+  ft_printf("SIZE_T via %%zu  : %zu", h);
+  ft_printf("IMAX_T via %%jd  : %jd", i);
+  ft_printf("PTR    via %%p   : %p", j);
+
+  printf("\n----------- PRINTF --------------\n");
+  printf("INT    via %%d   : %d\n", a);
+  printf("UINT   via %%u   : %u\n", b);
+  printf("LINT   via %%ld  : %ld\n", c);
+  printf("ULINT  via %%lu  : %lu\n", d);
+  printf("LLINT  via %%lld : %lld\n", e);
+  printf("ULLINT via %%llu : %llu\n", f);
+  printf("SHORT  via %%hd  : %hd\n", g);
+  printf("SIZE_T via %%zu  : %zu\n", h);
+  printf("IMAX_T via %%jd  : %jd\n", i);
+  printf("PTR    via %%p   : %p", j);
+
   return (0);
 }
 
-/* TEST du parsing :
+
+
+
+
+/*
+________________________________________________________________________________
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST de la fonction >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+*/
+
+
+
+
+
+/*
 
 ft_printf("Hello%"); aucune config
 ft_printf("Hello%5"); width 5
@@ -103,4 +157,5 @@ ft_printf("Hello%.10ll"); ll 1 et precision 10
 ft_printf("Hello%+ll"); ll 1 et plus 1
 
 ft_printf("Hello%+lld %10"); Config 1 : plus 1, ll 1 et Config 2 : width 10
+
 */

@@ -2,6 +2,7 @@
 
 int main()
 {
-printf("%#d\n", 42);
-return (0);
+  char str[2] = "42";
+  printf("%p\n", str);
+  return (0);
 }

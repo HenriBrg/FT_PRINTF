@@ -19,6 +19,7 @@ typedef struct s_printf {
 
 # include <stdarg.h>
 # include <stdio.h>
+# include <stdint.h>
 
 void f (int n, ...)
 {
@@ -26,15 +27,18 @@ void f (int n, ...)
    va_list va;
    va_start (va, n);
 
-   char *s1 = va_arg(va, PCHAR);
-   char *s2 = va_arg(va, PCHAR);
+   char *s1 = va_arg(va, char*);
+   char *s2 = va_arg(va, char*);
+   char ab =  va_arg(va, unsigned int);
    printf("%s\n", s1);
    printf("%s\n", s2);
+   printf("%hhd\n", ab);
    va_end (va);
 }
 
 int main()
 {
-  f(42, "Hello", "42");
+  unsigned char a = 42;
+  f(42, "Hello", "42STR", a);
   return (0);
 }
