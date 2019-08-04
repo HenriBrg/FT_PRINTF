@@ -10,10 +10,11 @@ Approche possible pour gérer les types de variable tous en même temps
 
 */
 
-# include <locale.h> // Pour tester les symboles, etc ...
+# include <locale.h>
 # include <stdarg.h>
 # include <limits.h>
 # include <stdint.h>
+# include <wchar.h>
 
 # include "./libft.h"
 
@@ -32,10 +33,8 @@ typedef struct s_printf {
   va_list args;
   char    *format;
   char    *output;
-
   int     i;
   int     returnSize;
-
   /*
   ** Pour gérer les flags -+0# et ' ' (espace)
   */
@@ -44,7 +43,6 @@ typedef struct s_printf {
 	int			space;
 	int			zero;
 	int			hash;
-
   /*
   ** Pour gérer les size/length (h, hh, l, ll, j, z)
   ** https://docs.microsoft.com/fr-fr/cpp/c-runtime-library/format-specification-syntax-printf-and-wprintf-functions?view=vs-2019
@@ -63,7 +61,6 @@ typedef struct s_printf {
 void setConfig(t_printf *tab);
 void showConfig(t_printf *tab);
 void handleDisplay(t_printf *tab, char c);
-char *ft_intmaxt_toa_base(char *base, intmax_t n);
-char *ft_Uintmaxt_toa_base(char *base, uintmax_t n);
+void convertWCharTAndWString(t_printf *tab, char c);
 
 #endif

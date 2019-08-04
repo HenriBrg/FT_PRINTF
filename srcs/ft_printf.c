@@ -80,6 +80,11 @@ int main()
   size_t                 h = 77;
   intmax_t               i = -3000000000;
   char                j[2] = "42";
+  char                   k = 'c';
+  char                  *l = "HELLO42STR";
+  wchar_t                m = L'ä';
+
+  setlocale(LC_ALL, "");
 
   printf("---------- FT_PRINTF -----------\n");
   ft_printf("INT    via %%d   : %d", a);
@@ -92,6 +97,9 @@ int main()
   ft_printf("SIZE_T via %%zu  : %zu", h);
   ft_printf("IMAX_T via %%jd  : %jd", i);
   ft_printf("PTR    via %%p   : %p", j);
+  ft_printf("CHAR   via %%c   : %c", k);
+  ft_printf("STR    via %%s   : %s", l);
+  ft_printf("WCHAR  via %%C   : %C\n", m);
 
   printf("\n----------- PRINTF --------------\n");
   printf("INT    via %%d   : %d\n", a);
@@ -103,7 +111,10 @@ int main()
   printf("SHORT  via %%hd  : %hd\n", g);
   printf("SIZE_T via %%zu  : %zu\n", h);
   printf("IMAX_T via %%jd  : %jd\n", i);
-  printf("PTR    via %%p   : %p", j);
+  printf("PTR    via %%p   : %p\n", j);
+  printf("CHAR   via %%c   : %c\n", k);
+  printf("STR    via %%s   : %s\n", l);
+  printf("WCHAR  via %%C   : %C\n", m);
 
   return (0);
 }

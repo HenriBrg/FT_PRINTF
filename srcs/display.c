@@ -59,6 +59,17 @@ void convertPointer(t_printf *tab)
 
   pointer = (unsigned long long int)va_arg(tab->args, void*);
   tab->output = ft_strjoin("0x", ft_Uintmaxt_toa_base("0123456789abcdef", pointer));
+  tab->returnSize += ft_strlen(tab->output);
+  printf("%s\n", tab->output);
+}
+
+void convertCharAndString(t_printf *tab, char c)
+{
+  // Passer via va_arg(tab->args, char) génère une erreur encore incomprise
+  if (c == 'c')
+    tab->output = ft_memset(ft_strnew(2), va_arg(tab->args, int), 1);
+  else if (c == 's')
+    tab->output = va_arg(tab->args, char*);
   printf("%s\n", tab->output);
 }
 
@@ -83,8 +94,8 @@ void  handleDisplay(t_printf *tab, char c)
     convertUnsignedInt(tab, c);
   else if (c == 'p')
     convertPointer(tab);
-  /*
-  else if (c == 's' || c == 'S')
-    handleString();
-  */
+  else if (c == 's' || c == 'c')
+    convertCharAndString(tab, c);
+  else if (c == 'S' || c == 'C')
+    convertWCharTAndWString(tab, c);
 }
