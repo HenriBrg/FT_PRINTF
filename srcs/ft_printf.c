@@ -32,7 +32,8 @@ static void dispatch(t_printf *tab)
   if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
   {
     handleDisplay(tab, tab->format[tab->i]);
-    tab->returnSize += (int)ft_strlen(tab->output);
+    if (tab->output)
+      tab->returnSize += (int)ft_strlen(tab->output);
     resetConfig(tab);
     tab->i++; // On saute le symbole de conversion
   }
@@ -82,7 +83,13 @@ int main()
   char                j[2] = "42";
   char                   k = 'c';
   char                  *l = "HELLO42STR";
-  wchar_t                m = L'ä';
+  // L'a'  a une sizeof de 1
+  // L'é'  a une sizeof de 2
+  // L''  a une sizeof de 3
+  // L'𝄞'  a une sizeof de 4
+  wchar_t                m = L'é';
+  wchar_t                *n = L"éab𝄞d";
+
 
   setlocale(LC_ALL, "");
 
@@ -99,7 +106,8 @@ int main()
   ft_printf("PTR    via %%p   : %p", j);
   ft_printf("CHAR   via %%c   : %c", k);
   ft_printf("STR    via %%s   : %s", l);
-  ft_printf("WCHAR  via %%C   : %C\n", m);
+  ft_printf("WCHAR  via %%C   : %C", m);
+  ft_printf("WCHAR* via %%S   : %S", n);
 
   printf("\n----------- PRINTF --------------\n");
   printf("INT    via %%d   : %d\n", a);
@@ -115,6 +123,7 @@ int main()
   printf("CHAR   via %%c   : %c\n", k);
   printf("STR    via %%s   : %s\n", l);
   printf("WCHAR  via %%C   : %C\n", m);
+  printf("WCHAR* via %%S   : %S\n", n);
 
   return (0);
 }
