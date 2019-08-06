@@ -19,7 +19,6 @@ void convertInt(t_printf *tab)
   else
     n = va_arg(tab->args, int);
   tab->output = ft_intmaxt_toa_base("0123456789", n);
-  printf("%s\n", tab->output);
 
 }
 
@@ -50,7 +49,6 @@ void convertUnsignedInt(t_printf *tab, char c)
     tab->output = ft_Uintmaxt_toa_base("0123456789abcdef", n);
   else if (c == 'X')
     tab->output = ft_Uintmaxt_toa_base("0123456789ABCDEF", n);
-  printf("%s\n", tab->output);
 }
 
 void convertPointer(t_printf *tab)
@@ -60,7 +58,6 @@ void convertPointer(t_printf *tab)
   pointer = (unsigned long long int)va_arg(tab->args, void*);
   tab->output = ft_strjoin("0x", ft_Uintmaxt_toa_base("0123456789abcdef", pointer));
   tab->returnSize += ft_strlen(tab->output);
-  printf("%s\n", tab->output);
 }
 
 void convertCharAndString(t_printf *tab, char c)
@@ -70,7 +67,6 @@ void convertCharAndString(t_printf *tab, char c)
     tab->output = ft_memset(ft_strnew(2), va_arg(tab->args, int), 1);
   else if (c == 's')
     tab->output = va_arg(tab->args, char*);
-  printf("%s\n", tab->output);
 }
 
 /*

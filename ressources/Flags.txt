@@ -9,6 +9,7 @@
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '0' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Champ d'application :
+Interdit sur : %s
 
 Remplie l'espace restant par des 0
 Si pas de nombre (tab->width) après le '0', rien de change

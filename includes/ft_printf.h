@@ -55,12 +55,16 @@ typedef struct s_printf {
   int     z;
 
   int    width;
+  int    widthConfig; // Booléen
   int    precision;
+  int    precisionConfig; // Booléen
+
 }              t_printf;
 
 void setConfig(t_printf *tab);
 void showConfig(t_printf *tab);
 void handleDisplay(t_printf *tab, char c);
 void convertWCharTAndWString(t_printf *tab, char c);
+void apply_config(t_printf *tab);
 
 #endif

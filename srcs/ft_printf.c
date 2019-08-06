@@ -19,7 +19,9 @@ static void resetConfig(t_printf *tab)
   tab->j         = 0;
   tab->z         = 0;
   tab->width     = 0;
-  tab->precision = 1;
+  tab->precision = 0;
+  tab->widthConfig     = 0;
+  tab->precisionConfig = 0;
 }
 
 static void dispatch(t_printf *tab)
@@ -32,6 +34,8 @@ static void dispatch(t_printf *tab)
   if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
   {
     handleDisplay(tab, tab->format[tab->i]);
+    apply_config(tab);
+    ft_putendl(tab->output);
     if (tab->output)
       tab->returnSize += (int)ft_strlen(tab->output);
     resetConfig(tab);
@@ -71,59 +75,31 @@ int ft_printf(const char *format, ...)
 
 int main()
 {
-  int                    a = -42;
-  unsigned int           b = 42;
-  long int               c = -100;
-  unsigned long int      d = 100;
-  long long int          e = -200;
-  unsigned long long int f = 200;
-  short                  g = -20;
-  size_t                 h = 77;
-  intmax_t               i = -3000000000;
-  char                j[2] = "42";
-  char                   k = 'c';
-  char                  *l = "HELLO42STR";
-  // L'a'  a une sizeof de 1
-  // L'é'  a une sizeof de 2
-  // L''  a une sizeof de 3
-  // L'𝄞'  a une sizeof de 4
-  wchar_t                m = L'é';
-  wchar_t                *n = L"éab𝄞d";
+  ft_printf("\n   ---------- FT_PRINTF ------------\n\n");
+  ft_printf("   PRECISION INT   via %%.0d avec    7     : %.0d", 7);
+  ft_printf("   PRECISION INT   via %%.10d avec  42     : %.10d", 42);
+  ft_printf("   PRECISION INT   via %%.10d avec -42     : %.10d", -42);
+  ft_printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s", "Hello");
+  ft_printf("   PRECISION CHAR* via %%.1s avec 'Hello'  : %.1s", "Hello");
+  ft_printf("   WIDTH     INT   via %%3d avec   12345   : %3d", 12345);
+  ft_printf("   WIDTH     INT   via %%10d avec  12345   : %10d", 12345);
+  ft_printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s", "HELLO");
+  ft_printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s", "HELLO");
 
 
-  setlocale(LC_ALL, "");
+  printf("\n   ----------- PRINTF --------------\n\n");
+  printf("   PRECISION INT   via %%.0d avec    7     : %.0d\n", 7);
+  printf("   PRECISION INT   via %%.10d avec  42     : %.10d\n", 42);
+  printf("   PRECISION INT   via %%.10d avec -42     : %.10d\n", -42);
+  printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s\n", "Hello");
+  printf("   PRECISION CHAR* via %%.1s avec  'Hello' : %.1s\n", "Hello");
+  printf("   WIDTH     INT   via %%3d avec   12345   : %3d\n", 12345);
+  printf("   WIDTH     INT   via %%10d avec  12345   : %10d\n", 12345);
+  printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s\n", "HELLO");
+  printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s\n", "HELLO");
 
-  printf("---------- FT_PRINTF -----------\n");
-  ft_printf("INT    via %%d   : %d", a);
-  ft_printf("UINT   via %%u   : %u", b);
-  ft_printf("LINT   via %%ld  : %ld", c);
-  ft_printf("ULINT  via %%lu  : %lu", d);
-  ft_printf("LLINT  via %%lld : %lld", e);
-  ft_printf("ULLINT via %%llu : %llu", f);
-  ft_printf("SHORT  via %%hd  : %hd", g);
-  ft_printf("SIZE_T via %%zu  : %zu", h);
-  ft_printf("IMAX_T via %%jd  : %jd", i);
-  ft_printf("PTR    via %%p   : %p", j);
-  ft_printf("CHAR   via %%c   : %c", k);
-  ft_printf("STR    via %%s   : %s", l);
-  ft_printf("WCHAR  via %%C   : %C", m);
-  ft_printf("WCHAR* via %%S   : %S", n);
 
-  printf("\n----------- PRINTF --------------\n");
-  printf("INT    via %%d   : %d\n", a);
-  printf("UINT   via %%u   : %u\n", b);
-  printf("LINT   via %%ld  : %ld\n", c);
-  printf("ULINT  via %%lu  : %lu\n", d);
-  printf("LLINT  via %%lld : %lld\n", e);
-  printf("ULLINT via %%llu : %llu\n", f);
-  printf("SHORT  via %%hd  : %hd\n", g);
-  printf("SIZE_T via %%zu  : %zu\n", h);
-  printf("IMAX_T via %%jd  : %jd\n", i);
-  printf("PTR    via %%p   : %p\n", j);
-  printf("CHAR   via %%c   : %c\n", k);
-  printf("STR    via %%s   : %s\n", l);
-  printf("WCHAR  via %%C   : %C\n", m);
-  printf("WCHAR* via %%S   : %S\n", n);
+  printf("\n");
 
   return (0);
 }
@@ -133,20 +109,72 @@ int main()
 
 
 /*
-________________________________________________________________________________
-
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST de la fonction >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-
-
-*/
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST APPLY CONFIG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
 
 
-/*
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST CONVERTISSEURS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+int                    a = -42;
+unsigned int           b = 42;
+long int               c = -100;
+unsigned long int      d = 100;
+long long int          e = -200;
+unsigned long long int f = 200;
+short                  g = -20;
+size_t                 h = 77;
+intmax_t               i = -3000000000;
+char                j[2] = "42";
+char                   k = 'c';
+char                  *l = "HELLO42STR";
+// L'a'  a une sizeof de 1
+// L'é'  a une sizeof de 2
+// L''  a une sizeof de 3
+// L'𝄞'  a une sizeof de 4
+wchar_t                m = L'é';
+wchar_t                *n = L"éab𝄞d";
+
+
+setlocale(LC_ALL, "");
+
+printf("---------- FT_PRINTF -----------\n");
+ft_printf("INT    via %%d   : %d", a);
+ft_printf("UINT   via %%u   : %u", b);
+ft_printf("LINT   via %%ld  : %ld", c);
+ft_printf("ULINT  via %%lu  : %lu", d);
+ft_printf("LLINT  via %%lld : %lld", e);
+ft_printf("ULLINT via %%llu : %llu", f);
+ft_printf("SHORT  via %%hd  : %hd", g);
+ft_printf("SIZE_T via %%zu  : %zu", h);
+ft_printf("IMAX_T via %%jd  : %jd", i);
+ft_printf("PTR    via %%p   : %p", j);
+ft_printf("CHAR   via %%c   : %c", k);
+ft_printf("STR    via %%s   : %s", l);
+ft_printf("WCHAR  via %%C   : %C", m);
+ft_printf("WCHAR* via %%S   : %S", n);
+
+printf("\n----------- PRINTF --------------\n");
+printf("INT    via %%d   : %d\n", a);
+printf("UINT   via %%u   : %u\n", b);
+printf("LINT   via %%ld  : %ld\n", c);
+printf("ULINT  via %%lu  : %lu\n", d);
+printf("LLINT  via %%lld : %lld\n", e);
+printf("ULLINT via %%llu : %llu\n", f);
+printf("SHORT  via %%hd  : %hd\n", g);
+printf("SIZE_T via %%zu  : %zu\n", h);
+printf("IMAX_T via %%jd  : %jd\n", i);
+printf("PTR    via %%p   : %p\n", j);
+printf("CHAR   via %%c   : %c\n", k);
+printf("STR    via %%s   : %s\n", l);
+printf("WCHAR  via %%C   : %C\n", m);
+printf("WCHAR* via %%S   : %S\n", n);
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST SET CONFIG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 ft_printf("Hello%"); aucune config
 ft_printf("Hello%5"); width 5

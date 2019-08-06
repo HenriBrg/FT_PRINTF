@@ -34,6 +34,7 @@ static int setWidth(t_printf *tab)
   {
     tab->width = ft_atoi(&tab->format[tab->i]);
     tab->i += ft_strlen(ft_itoa(tab->width));
+    tab->widthConfig = 1;
     return (1);
   }
   return (0);
@@ -49,6 +50,7 @@ static int setPrecision(t_printf *tab)
     tab->i++;
     tab->precision = ft_atoi(&tab->format[tab->i]);
     tab->i += ft_strlen(ft_itoa(tab->precision));
+    tab->precisionConfig = 1;
     return (1);
   }
   return (0);
@@ -95,7 +97,10 @@ void showConfig(t_printf *tab)
   printf("j         : %d\n", tab->j         );
   printf("z         : %d\n", tab->z         );
   printf("width     : %d\n", tab->width     );
+  printf("widthConf : %d\n", tab->widthConfig     );
   printf("precision : %d\n", tab->precision );
+  printf("preciConf : %d\n", tab->precisionConfig );
+
 }
 
 

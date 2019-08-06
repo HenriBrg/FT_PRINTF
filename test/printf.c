@@ -3,6 +3,6 @@
 int main()
 {
   char str[2] = "42";
-  printf("%p\n", str);
+  printf("|%.0s\n", "abcdefg");
   return (0);
 }
