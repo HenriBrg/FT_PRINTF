@@ -19,7 +19,7 @@ Exemple 1 : printf(" %010d \n", 42) ==> 0000000042
 
 
 Si 0 et - apparaissent, 0 est ignoré
-Si il y a une précision (ex : .5), et que le la variable est un entier (i, u, x, X, o, d) le 0 est ignoré
+Si il y a une précision (ex : .5), et que la variable est un entier (i, u, x, X, o, d) le 0 est ignoré
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Le flag '-' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

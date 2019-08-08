@@ -104,17 +104,13 @@ void showConfig(t_printf *tab)
 }
 
 
+// TODO : créer une fonction qui modifie la config si des instructions s'annule entre elles
+
+
 void setConfig(t_printf *tab)
 {
   if (setFlags(tab) == 1)
-  {
-    // Hiérarchie des flags
-    if (tab->minus)
-      tab->zero = 0;
-    if (tab->plus)
-      tab->space = 0;
     return ;
-  }
   if (setWidth(tab) == 1)
     return ;
   if (setPrecision(tab) == 1)

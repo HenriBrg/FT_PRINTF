@@ -2,7 +2,8 @@
 
 int main()
 {
-  char str[2] = "42";
-  printf("|%.0s\n", "abcdefg");
+
+  printf("%- 10d\n", 42);
+
   return (0);
 }

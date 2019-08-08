@@ -24,13 +24,36 @@ static void resetConfig(t_printf *tab)
   tab->precisionConfig = 0;
 }
 
+// TODO : gérer si ft_printf("%--10d") car on aura un -10 en width non ?
+void control_config(t_printf *tab, char c)
+{
+  // Si 0 est spécifié pour un format entier (i, u, x, X, o, d) et qu’une spécification
+  // de précision est également présente (par exemple, %04.d), le 0 est ignoré
+  if (tab->precisionConfig && ft_strchr("dDioOuUxX", c))
+    tab->zero = 0;
+  // D'après mes observations, la précision l'emporte sur la width  car printf("%05.10d", -42) = -0000000042
+  if (tab->precisionConfig)
+    tab->widthConfig = tab->width = 0;
+  // Si 0 et - apparaissent, le 0 est ignoré
+  if (tab->minus)
+    tab->zero = 0;
+  // L’espace est ignoré si l’espace et des indicateurs + apparaissent
+  if (tab->plus)
+    tab->space = 0;
+  //  flag ' ' results in undefined behavior with 'x' (idem pour 'o', 'O' et 'X')
+  if (ft_strchr("oOxX", c) && tab->space)
+    tab->space = 0;
+  if (tab->space && ft_strchr("cCsS", c))
+    tab->space = tab->width = tab->widthConfig = 0;
+}
+
 static void dispatch(t_printf *tab)
 {
   tab->i++; // On saute le symbole %
   while (tab->i < (int)ft_strlen(tab->format) &&
          ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
     setConfig(tab);
-  // showConfig(tab);
+  control_config(tab, tab->format[tab->i]);
   if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
   {
     handleDisplay(tab, tab->format[tab->i]);
@@ -76,28 +99,15 @@ int ft_printf(const char *format, ...)
 int main()
 {
   ft_printf("\n   ---------- FT_PRINTF ------------\n\n");
-  ft_printf("   PRECISION INT   via %%.0d avec    7     : %.0d", 7);
-  ft_printf("   PRECISION INT   via %%.10d avec  42     : %.10d", 42);
-  ft_printf("   PRECISION INT   via %%.10d avec -42     : %.10d", -42);
-  ft_printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s", "Hello");
-  ft_printf("   PRECISION CHAR* via %%.1s avec 'Hello'  : %.1s", "Hello");
-  ft_printf("   WIDTH     INT   via %%3d avec   12345   : %3d", 12345);
-  ft_printf("   WIDTH     INT   via %%10d avec  12345   : %10d", 12345);
-  ft_printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s", "HELLO");
-  ft_printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s", "HELLO");
+  ft_printf("   FLAG - CHAR* via %%-10s avec 'Hello' : %-10s", "Hello");
+  ft_printf("   FLAG - INT via %%- 10d avec   42     : %- 10d", 42);
+  ft_printf("   FLAG - INT via %%-10d avec   42      : %-10d", 42);
 
 
   printf("\n   ----------- PRINTF --------------\n\n");
-  printf("   PRECISION INT   via %%.0d avec    7     : %.0d\n", 7);
-  printf("   PRECISION INT   via %%.10d avec  42     : %.10d\n", 42);
-  printf("   PRECISION INT   via %%.10d avec -42     : %.10d\n", -42);
-  printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s\n", "Hello");
-  printf("   PRECISION CHAR* via %%.1s avec  'Hello' : %.1s\n", "Hello");
-  printf("   WIDTH     INT   via %%3d avec   12345   : %3d\n", 12345);
-  printf("   WIDTH     INT   via %%10d avec  12345   : %10d\n", 12345);
-  printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s\n", "HELLO");
-  printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s\n", "HELLO");
-
+  printf("   FLAG - CHAR* via %%-10s avec 'Hello' : %-10s\n", "Hello");
+  printf("   FLAG - INT via %%- 10d avec   42     : %- 10d\n", 42);
+  printf("   FLAG - INT via %%-10d avec   42      : %-10d\n", 42);
 
   printf("\n");
 
@@ -113,6 +123,57 @@ int main()
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST APPLY CONFIG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+// WIDTH
+ft_printf("   WIDTH     INT   via %%3d avec   12345   : %3d", 12345);
+ft_printf("   WIDTH     INT   via %%10d avec  12345   : %10d", 12345);
+ft_printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s", "HELLO");
+ft_printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s", "HELLO");
+ft_printf("   WIDTH HEX INT   via %%3x avec     42    : %3x", 42);
+ft_printf("   WIDTH HEX INT   via %%#x avec     42    : %#x", 42);
+ft_printf("   WIDTH HEX INT   via %%#010x avec   42   : %#010x", 42);
+
+
+printf("   WIDTH     INT   via %%3d avec   12345   : %3d\n", 12345);
+printf("   WIDTH     INT   via %%10d avec  12345   : %10d\n", 12345);
+printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s\n", "HELLO");
+printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s\n", "HELLO");
+printf("   WIDTH HEX INT   via %%3x avec     42    : %3x\n", 42);
+printf("   WIDTH HEX INT   via %%#x avec     42    : %#x\n", 42);
+printf("   WIDTH HEX INT   via %%#010x avec   42   : %#010x\n", 42);
+
+// PRECISION
+
+ft_printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s", "Hello");
+ft_printf("   PRECISION CHAR* via %%.1s avec 'Hello'  : %.1s", "Hello");
+ft_printf("   PRECISION INT   via %%.0d avec    7     : %.0d", 7);
+ft_printf("   PRECISION INT   via %%.10d avec  42     : %.10d", 42);
+ft_printf("   PRECISION INT   via %%.10d avec -42     : %.10d", -42);
+ft_printf("   PRECI HEX INT   via %%.3x avec     42   : %.3x", 42);
+ft_printf("   PRECI HEX INT   via %%.5x avec     42   : %#.5x", 42);
+ft_printf("   PRECI HEX INT   via %%#.10x avec   42   : %#.10x", 42);
+
+printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s\n", "Hello");
+printf("   PRECISION CHAR* via %%.1s avec 'Hello'  : %.1s\n", "Hello");
+printf("   PRECISION INT   via %%.0d avec    7     : %.0d\n", 7);
+printf("   PRECISION INT   via %%.10d avec  42     : %.10d\n", 42);
+printf("   PRECISION INT   via %%.10d avec -42     : %.10d\n", -42);
+printf("   PRECI HEX INT   via %%.3x avec     42   : %.3x\n", 42);
+printf("   PRECI HEX INT   via %%.5x avec     42   : %#.5x\n", 42);
+printf("   PRECI HEX INT   via %%#.10x avec   42   : %#.10x\n", 42);
+
+// MELANGE de flags
+
+ft_printf("   FLAG 0    INT   via %%010d avec  42     : %010d", 42);
+ft_printf("   FLAG 0    INT   via %%010d avec  -42    : %010d", -42);
+ft_printf("   FLAG ' '  INT   via %% 4d avec   42     : % 4d", 42);
+ft_printf("   FLAG ' '  INT   via %% 4d avec   -42    : % 4d", -42);
+ft_printf("   FLAG +    INT   via %%+d avec    42     : %+d", 42);
+
+printf("   FLAG 0    INT   via %%010d avec  42     : %010d\n", 42);
+printf("   FLAG 0    INT   via %%010d avec  -42    : %010d\n", -42);
+printf("   FLAG ' '  INT   via %% 4d avec   42     : % 4d\n", 42);
+printf("   FLAG ' '  INT   via %% 4d avec   -42    : % 4d\n", -42);
+printf("   FLAG +    INT   via %%+d avec    42     : %+d\n", 42);
 
 
 
