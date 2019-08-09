@@ -1,6 +1,10 @@
 #include "../includes/ft_printf.h"
 
-void convertInt(t_printf *tab)
+/*
+** RAS
+*/
+
+static void convert_int(t_printf *tab)
 {
   intmax_t n;
 
@@ -19,10 +23,13 @@ void convertInt(t_printf *tab)
   else
     n = va_arg(tab->args, int);
   tab->output = ft_intmaxt_toa_base("0123456789", n);
-
 }
 
-void convertUnsignedInt(t_printf *tab, char c)
+/*
+** RAS
+*/
+
+static void convert_unsigned_int(t_printf *tab, char c)
 {
   uintmax_t n;
 
@@ -40,8 +47,7 @@ void convertUnsignedInt(t_printf *tab, char c)
     n = va_arg(tab->args, size_t);
   else
     n = va_arg(tab->args, unsigned int);
-
-  if (c == 'o')
+  if (c == 'o' || c == 'O')
     tab->output = ft_Uintmaxt_toa_base("01234567", n);
   else if (c == 'u' || c == 'U')
     tab->output = ft_Uintmaxt_toa_base("0123456789", n);
@@ -49,20 +55,28 @@ void convertUnsignedInt(t_printf *tab, char c)
     tab->output = ft_Uintmaxt_toa_base("0123456789abcdef", n);
   else if (c == 'X')
     tab->output = ft_Uintmaxt_toa_base("0123456789ABCDEF", n);
+  else if (c == 'b')
+    tab->output = ft_Uintmaxt_toa_base("01", n);
 }
 
-void convertPointer(t_printf *tab)
-{
-  uintmax_t pointer;
+/*
+** RAS
+*/
 
-  pointer = (unsigned long long int)va_arg(tab->args, void*);
-  tab->output = ft_strjoin("0x", ft_Uintmaxt_toa_base("0123456789abcdef", pointer));
-  tab->returnSize += ft_strlen(tab->output);
+static void convert_pointer(t_printf *tab)
+{
+  uintmax_t ptr;
+
+  ptr = (unsigned long long int)va_arg(tab->args, void*);
+  tab->output = ft_strjoin("0x", ft_Uintmaxt_toa_base("0123456789abcdef", ptr));
 }
 
-void convertCharAndString(t_printf *tab, char c)
+/*
+** RAS
+*/
+
+static void convert_char_and_string(t_printf *tab, char c)
 {
-  // Passer via va_arg(tab->args, char) génère une erreur encore incomprise
   if (c == 'c')
     tab->output = ft_memset(ft_strnew(2), va_arg(tab->args, int), 1);
   else if (c == 's')
@@ -81,17 +95,18 @@ void convertCharAndString(t_printf *tab, char c)
 ** j  For integers, an argument is expected of type intmax_t
 */
 
-
-void  handleDisplay(t_printf *tab, char c)
+void  handle_display(t_printf *tab, char c)
 {
   if (c == 'i' || c == 'd' || c == 'D')
-    convertInt(tab);
-  else if (c == 'o' || c == 'u' || c == 'U' || c == 'x' || c == 'X')
-    convertUnsignedInt(tab, c);
+    convert_int(tab);
+  else if (c == 'o' || c == 'u' || c == 'U' || c == 'x' || c == 'X' || c == 'b')
+    convert_unsigned_int(tab, c);
   else if (c == 'p')
-    convertPointer(tab);
+    convert_pointer(tab);
   else if (c == 's' || c == 'c')
-    convertCharAndString(tab, c);
+    convert_char_and_string(tab, c);
   else if (c == 'S' || c == 'C')
-    convertWCharTAndWString(tab, c);
+    convert_wchart_and_wstring(tab, c);
+  else if (c == '%')
+    tab->output = ft_memset(ft_strnew(2), '%', 1);
 }

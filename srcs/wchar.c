@@ -116,7 +116,7 @@ char *strwchar_to_str(wchar_t *strwc)
 ** %S consiste en un appel en boucle des fonctions utilisée pour %C
 */
 
-void convertWCharTAndWString(t_printf *tab, char c)
+void convert_wchart_and_wstring(t_printf *tab, char c)
 {
   wchar_t wc;
   wchar_t *ws;

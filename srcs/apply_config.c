@@ -50,8 +50,8 @@ void apply_precision(t_printf *tab, char c)
   char *tmp;
   char *strprefix;
 
-  if (ft_strchr("dDiouUxX", c) && tab->precisionConfig
-                               && tab->precision > (int)ft_strlen(tab->output))
+  if (ft_strchr("dDioOuUxX", c) && tab->precisionConfig
+                                && tab->precision > (int)ft_strlen(tab->output))
   {
     strprefix = prefix(tab, c);
     size = ft_strlen(tab->output);
@@ -66,16 +66,16 @@ void apply_precision(t_printf *tab, char c)
     tab->output = ft_strjoin(tmp, tab->output + size);
     free(tmp);
   }
-  else if ((c == 's' || c == 'S') && tab->precisionConfig == 1) // Pas sur les wchar_t* soit correctement gérés ici
+  else if ((c == 's' || c == 'S') && tab->precisionConfig == 1)
     tab->output = ft_strndup(tab->output, tab->precision);
 }
 
 /*
 ** apply_width intervient sur les nombres et string SI leur taille est inférieur à la width donnée
-** Elle détermine la taille maximale de l'output (au sens de strlen(output)) et prend donc en compte la taille de l'éventuel préfixe (à l'inverse de la précision)
-** Si le flag 0 est activé, le remplissage se fera par des 0 plutot que par des ' '
+** Elle détermine la taille maximale de l'output (au sens de strlen(output)) et prend donc en compte
+** la taille de l'éventuel préfixe (à l'inverse de la précision).
+** Si le flag 0 est activé, le remplissage se fera par des 0 et non des ' '
 */
-
 
 void apply_width(t_printf *tab)
 {
@@ -85,7 +85,6 @@ void apply_width(t_printf *tab)
   char *tmp;
   char *strprefix;
 
-  // TODO : gérer tous les préfixes possibles (- + 0 0x 0X ...)
   strprefix = (tab->zero == 1) ? prefix(tab, tab->format[tab->i]) : 0;
   if (tab->width > (int)ft_strlen(tab->output))
   {
@@ -112,7 +111,7 @@ void apply_flags(t_printf *tab, char c)
 {
   if (tab->plus && ft_strchr("idD", c) && tab->output[0] != '-')
     tab->output = ft_strjoin("+", tab->output);
-  else if (tab->space && ft_strchr("idD", c) && tab->output[0] != '-')
+  else if (tab->space && ft_strchr("idD", c) && !ft_strchr(tab->output, '-'))
       tab->output = ft_strjoin(" ", tab->output);
   else if (tab->hash && ft_strchr("xXoO", c))
   {
@@ -128,7 +127,7 @@ void apply_flags(t_printf *tab, char c)
 /* Ordre d'application de la config :
 ** 1/ Flags + (ajoute + ou -), flag ' ' (ajoute +) et flag # (ajoute 0, 0x, 0X)
 ** 2/ Width (width combiné ou non au flag 0) OU Précision (qui par défaut remplit par 0)
-** 3/ Flag -
+** 3/ Gestion du flag '-' et gestion de l'exception avec flag '-' et flag ' ' sur un int positif (qui aura un prefixe ' ')
 */
 
 void apply_config(t_printf *tab)
@@ -139,11 +138,10 @@ void apply_config(t_printf *tab)
   char *tmp;
 
   apply_flags(tab, tab->format[tab->i]);
-  if (tab->precisionConfig == 1 && ft_strchr("diouxXsScC", tab->format[tab->i]))
+  if (tab->precisionConfig && ft_strchr("dDiOouUxXsScC", tab->format[tab->i]))
     apply_precision(tab, tab->format[tab->i]);
-  else if (tab->widthConfig == 1)
+  if (tab->widthConfig == 1)
     apply_width(tab);
-  // Gestion du flag '-' :
   if (tab->minus)
   {
     i = -1;
@@ -155,5 +153,6 @@ void apply_config(t_printf *tab)
       place++;
     tmp = ft_memset(ft_strnew(place + 1), ' ', place);
     tab->output = ft_strjoin(tab->output + place - min_plus, tmp + min_plus);
+    free(tmp);
   }
 }

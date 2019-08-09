@@ -61,10 +61,10 @@ typedef struct s_printf {
 
 }              t_printf;
 
-void setConfig(t_printf *tab);
-void showConfig(t_printf *tab);
-void handleDisplay(t_printf *tab, char c);
-void convertWCharTAndWString(t_printf *tab, char c);
+void set_config(t_printf *tab);
+void handle_display(t_printf *tab, char c);
+void convert_wchart_and_wstring(t_printf *tab, char c);
 void apply_config(t_printf *tab);
+int  ft_printf(const char *format, ...);
 
 #endif

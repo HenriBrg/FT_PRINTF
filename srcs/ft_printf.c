@@ -1,9 +1,5 @@
 #include "../includes/ft_printf.h"
 
-/*
-** %[flags][width][.precision][size/length]type
-*/
-
 static void resetConfig(t_printf *tab)
 {
   tab->output    = 0;
@@ -24,47 +20,69 @@ static void resetConfig(t_printf *tab)
   tab->precisionConfig = 0;
 }
 
-// TODO : gérer si ft_printf("%--10d") car on aura un -10 en width non ?
-void control_config(t_printf *tab, char c)
+/*
+** 1) Si 0 est spécifié pour un format entier (i, u, x, X, o, d) et qu’une spécification
+** de précision est également présente (par exemple, %04.d), le 0 est ignoré
+**
+** 2) D'après mes observations, la précision l'emporte sur la width  car printf("%05.10d", -42) = -0000000042
+**
+** 3) Si 0 et - apparaissent, le 0 est ignoré
+**
+** 4) L’espace est ignoré si l’espace et des indicateurs + apparaissent
+**
+** 5) flag ' ' results in undefined behavior with 'x' (idem pour 'o', 'O' et 'X')
+**
+** 6) Si flag ' ' et que conversion en string ou char, le flag ' ' est ignoré
+*/
+
+static void control_config(t_printf *tab, char c)
 {
-  // Si 0 est spécifié pour un format entier (i, u, x, X, o, d) et qu’une spécification
-  // de précision est également présente (par exemple, %04.d), le 0 est ignoré
-  if (tab->precisionConfig && ft_strchr("dDioOuUxX", c))
+  if (tab->precisionConfig && ft_strchr("dDioOuUxXb", c))
     tab->zero = 0;
-  // D'après mes observations, la précision l'emporte sur la width  car printf("%05.10d", -42) = -0000000042
-  if (tab->precisionConfig)
-    tab->widthConfig = tab->width = 0;
-  // Si 0 et - apparaissent, le 0 est ignoré
   if (tab->minus)
     tab->zero = 0;
-  // L’espace est ignoré si l’espace et des indicateurs + apparaissent
   if (tab->plus)
     tab->space = 0;
-  //  flag ' ' results in undefined behavior with 'x' (idem pour 'o', 'O' et 'X')
   if (ft_strchr("oOxX", c) && tab->space)
     tab->space = 0;
-  if (tab->space && ft_strchr("cCsS", c))
-    tab->space = tab->width = tab->widthConfig = 0;
 }
+
+/*
+** 1) On saute le %
+** 2) On itère sur chaque char de configuration possible ("-+ .0#0123456789hlzj")
+** 3) Si on en trouve un, on appel setConfig() qui va stocker la config dans la structure tab
+**    Au sein de la fonction setConfig, il peut y avoir des jump (incrémentation de tab->i)
+**    lorsqu'il faut aller récupérer un nombre après le flag '0' par exemple
+** 4) Après on contrôle la cohérence de la config, s'il y a des instructions incompatible, on corrige dans control_config
+** 5) On arrive sur le symbole de conversion, et appel handleDisplay qui stock l'output brut dans la structure
+** 6) On applique à cet tab->output la config et on le print
+** 7) Si l'output n'est pas nul, on incrémente returnSize de strlen(tab->output)
+** 8) On reset la config pour les éventuels prochaines conversions puis on saute le symbole
+*/
 
 static void dispatch(t_printf *tab)
 {
-  tab->i++; // On saute le symbole %
+  tab->i++;
   while (tab->i < (int)ft_strlen(tab->format) &&
          ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
-    setConfig(tab);
+    set_config(tab);
   control_config(tab, tab->format[tab->i]);
-  if (ft_strchr("sSpdDioOuUxXcC", tab->format[tab->i]))
+  if (ft_strchr("sSpdDioOuUxXcCb%", tab->format[tab->i]))
   {
-    handleDisplay(tab, tab->format[tab->i]);
+    handle_display(tab, tab->format[tab->i]);
     apply_config(tab);
-    ft_putendl(tab->output);
+    ft_putstr(tab->output);
     if (tab->output)
       tab->returnSize += (int)ft_strlen(tab->output);
     resetConfig(tab);
-    tab->i++; // On saute le symbole de conversion
+    tab->i++;
   }
 }
+
+/*
+** On itère sur *format et dès que l'on détecte un %
+** on appel dispatch() (sauf si %%)
+*/
 
 int ft_printf(const char *format, ...)
 {
@@ -95,176 +113,3 @@ int ft_printf(const char *format, ...)
   }
   return (tab->returnSize);
 }
-
-int main()
-{
-  ft_printf("\n   ---------- FT_PRINTF ------------\n\n");
-  ft_printf("   FLAG - CHAR* via %%-10s avec 'Hello' : %-10s", "Hello");
-  ft_printf("   FLAG - INT via %%- 10d avec   42     : %- 10d", 42);
-  ft_printf("   FLAG - INT via %%-10d avec   42      : %-10d", 42);
-
-
-  printf("\n   ----------- PRINTF --------------\n\n");
-  printf("   FLAG - CHAR* via %%-10s avec 'Hello' : %-10s\n", "Hello");
-  printf("   FLAG - INT via %%- 10d avec   42     : %- 10d\n", 42);
-  printf("   FLAG - INT via %%-10d avec   42      : %-10d\n", 42);
-
-  printf("\n");
-
-  return (0);
-}
-
-
-
-
-
-/*
-
-
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST APPLY CONFIG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-// WIDTH
-ft_printf("   WIDTH     INT   via %%3d avec   12345   : %3d", 12345);
-ft_printf("   WIDTH     INT   via %%10d avec  12345   : %10d", 12345);
-ft_printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s", "HELLO");
-ft_printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s", "HELLO");
-ft_printf("   WIDTH HEX INT   via %%3x avec     42    : %3x", 42);
-ft_printf("   WIDTH HEX INT   via %%#x avec     42    : %#x", 42);
-ft_printf("   WIDTH HEX INT   via %%#010x avec   42   : %#010x", 42);
-
-
-printf("   WIDTH     INT   via %%3d avec   12345   : %3d\n", 12345);
-printf("   WIDTH     INT   via %%10d avec  12345   : %10d\n", 12345);
-printf("   WIDTH     CHAR* via %%3s avec   'HELLO' : %3s\n", "HELLO");
-printf("   WIDTH     CHAR* via %%10s avec  'HELLO' : %10s\n", "HELLO");
-printf("   WIDTH HEX INT   via %%3x avec     42    : %3x\n", 42);
-printf("   WIDTH HEX INT   via %%#x avec     42    : %#x\n", 42);
-printf("   WIDTH HEX INT   via %%#010x avec   42   : %#010x\n", 42);
-
-// PRECISION
-
-ft_printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s", "Hello");
-ft_printf("   PRECISION CHAR* via %%.1s avec 'Hello'  : %.1s", "Hello");
-ft_printf("   PRECISION INT   via %%.0d avec    7     : %.0d", 7);
-ft_printf("   PRECISION INT   via %%.10d avec  42     : %.10d", 42);
-ft_printf("   PRECISION INT   via %%.10d avec -42     : %.10d", -42);
-ft_printf("   PRECI HEX INT   via %%.3x avec     42   : %.3x", 42);
-ft_printf("   PRECI HEX INT   via %%.5x avec     42   : %#.5x", 42);
-ft_printf("   PRECI HEX INT   via %%#.10x avec   42   : %#.10x", 42);
-
-printf("   PRECISION CHAR* via %%.10s avec 'Hello' : %.10s\n", "Hello");
-printf("   PRECISION CHAR* via %%.1s avec 'Hello'  : %.1s\n", "Hello");
-printf("   PRECISION INT   via %%.0d avec    7     : %.0d\n", 7);
-printf("   PRECISION INT   via %%.10d avec  42     : %.10d\n", 42);
-printf("   PRECISION INT   via %%.10d avec -42     : %.10d\n", -42);
-printf("   PRECI HEX INT   via %%.3x avec     42   : %.3x\n", 42);
-printf("   PRECI HEX INT   via %%.5x avec     42   : %#.5x\n", 42);
-printf("   PRECI HEX INT   via %%#.10x avec   42   : %#.10x\n", 42);
-
-// MELANGE de flags
-
-ft_printf("   FLAG 0    INT   via %%010d avec  42     : %010d", 42);
-ft_printf("   FLAG 0    INT   via %%010d avec  -42    : %010d", -42);
-ft_printf("   FLAG ' '  INT   via %% 4d avec   42     : % 4d", 42);
-ft_printf("   FLAG ' '  INT   via %% 4d avec   -42    : % 4d", -42);
-ft_printf("   FLAG +    INT   via %%+d avec    42     : %+d", 42);
-
-printf("   FLAG 0    INT   via %%010d avec  42     : %010d\n", 42);
-printf("   FLAG 0    INT   via %%010d avec  -42    : %010d\n", -42);
-printf("   FLAG ' '  INT   via %% 4d avec   42     : % 4d\n", 42);
-printf("   FLAG ' '  INT   via %% 4d avec   -42    : % 4d\n", -42);
-printf("   FLAG +    INT   via %%+d avec    42     : %+d\n", 42);
-
-
-
-
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST CONVERTISSEURS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-int                    a = -42;
-unsigned int           b = 42;
-long int               c = -100;
-unsigned long int      d = 100;
-long long int          e = -200;
-unsigned long long int f = 200;
-short                  g = -20;
-size_t                 h = 77;
-intmax_t               i = -3000000000;
-char                j[2] = "42";
-char                   k = 'c';
-char                  *l = "HELLO42STR";
-// L'a'  a une sizeof de 1
-// L'é'  a une sizeof de 2
-// L''  a une sizeof de 3
-// L'𝄞'  a une sizeof de 4
-wchar_t                m = L'é';
-wchar_t                *n = L"éab𝄞d";
-
-
-setlocale(LC_ALL, "");
-
-printf("---------- FT_PRINTF -----------\n");
-ft_printf("INT    via %%d   : %d", a);
-ft_printf("UINT   via %%u   : %u", b);
-ft_printf("LINT   via %%ld  : %ld", c);
-ft_printf("ULINT  via %%lu  : %lu", d);
-ft_printf("LLINT  via %%lld : %lld", e);
-ft_printf("ULLINT via %%llu : %llu", f);
-ft_printf("SHORT  via %%hd  : %hd", g);
-ft_printf("SIZE_T via %%zu  : %zu", h);
-ft_printf("IMAX_T via %%jd  : %jd", i);
-ft_printf("PTR    via %%p   : %p", j);
-ft_printf("CHAR   via %%c   : %c", k);
-ft_printf("STR    via %%s   : %s", l);
-ft_printf("WCHAR  via %%C   : %C", m);
-ft_printf("WCHAR* via %%S   : %S", n);
-
-printf("\n----------- PRINTF --------------\n");
-printf("INT    via %%d   : %d\n", a);
-printf("UINT   via %%u   : %u\n", b);
-printf("LINT   via %%ld  : %ld\n", c);
-printf("ULINT  via %%lu  : %lu\n", d);
-printf("LLINT  via %%lld : %lld\n", e);
-printf("ULLINT via %%llu : %llu\n", f);
-printf("SHORT  via %%hd  : %hd\n", g);
-printf("SIZE_T via %%zu  : %zu\n", h);
-printf("IMAX_T via %%jd  : %jd\n", i);
-printf("PTR    via %%p   : %p\n", j);
-printf("CHAR   via %%c   : %c\n", k);
-printf("STR    via %%s   : %s\n", l);
-printf("WCHAR  via %%C   : %C\n", m);
-printf("WCHAR* via %%S   : %S\n", n);
-
-
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST SET CONFIG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-ft_printf("Hello%"); aucune config
-ft_printf("Hello%5"); width 5
-ft_printf("Hello%05"); zero 1 et width 5
-ft_printf("Hello%+5"); plus 1 et width 5
-ft_printf("Hello%-5"); minus 1 et width 5
-ft_printf("Hello% 5"); space 1 et width 5
-ft_printf("Hello%#5"); hash 1 et width 5
-
-ft_printf("Hello%.10"); precision 10
-ft_printf("Hello%-15.10"); minus 1 width 15 precision 10
-
-ft_printf("Hello%hh"); hh 1
-ft_printf("Hello%ll"); ll 1
-ft_printf("Hello%h"); h 1
-ft_printf("Hello%l"); l 1
-ft_printf("Hello%j"); j 1
-ft_printf("Hello%z"); z 1
-
-ft_printf("Hello%#hh"); hash 1 et hh 1
-ft_printf("Hello%#ll"); hash 1 et ll 1
-ft_printf("Hello%#h"); hash 1 et h 1
-ft_printf("Hello%#l"); hash 1 et l 1
-ft_printf("Hello%#j"); hash 1 et j 1
-ft_printf("Hello%#z"); hash 1 et z 1
-
-ft_printf("Hello%.10ll"); ll 1 et precision 10
-ft_printf("Hello%+ll"); ll 1 et plus 1
-
-ft_printf("Hello%+lld %10"); Config 1 : plus 1, ll 1 et Config 2 : width 10
-
-*/

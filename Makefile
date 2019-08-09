@@ -5,7 +5,7 @@
 
 NAME = libftprintf.a
 
-SRCS = srcs/ft_printf.c srcs/setConfig.c srcs/display.c srcs/wchar.c \
+SRCS = srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/wchar.c \
 			 srcs/apply_config.c
 
 OBJS = ${SRCS:.c=.o}
