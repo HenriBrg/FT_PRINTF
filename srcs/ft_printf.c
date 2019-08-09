@@ -54,19 +54,28 @@ static void control_config(t_printf *tab, char c)
 **    Au sein de la fonction setConfig, il peut y avoir des jump (incrémentation de tab->i)
 **    lorsqu'il faut aller récupérer un nombre après le flag '0' par exemple
 ** 4) Après on contrôle la cohérence de la config, s'il y a des instructions incompatible, on corrige dans control_config
+** Note : on test ensuite si on est pas à la fin du string format, sinon on segfaulterai par la suite
 ** 5) On arrive sur le symbole de conversion, et appel handleDisplay qui stock l'output brut dans la structure
 ** 6) On applique à cet tab->output la config et on le print
 ** 7) Si l'output n'est pas nul, on incrémente returnSize de strlen(tab->output)
 ** 8) On reset la config pour les éventuels prochaines conversions puis on saute le symbole
+**
+** IDEE : faire un if (ft_strchr("sSpdDioOuUxXcCb%", tab->format[tab->i]) == 0
+**                       && ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]) == 0
+**                         return ; // car on est plus sur de la config et le char qui suit la fin de la config n'est pas un convertisseur
+**
 */
 
 static void dispatch(t_printf *tab)
 {
   tab->i++;
+
   while (tab->i < (int)ft_strlen(tab->format) &&
          ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
     set_config(tab);
   control_config(tab, tab->format[tab->i]);
+  if (tab->format[tab->i] == '\0')
+    return ;
   if (ft_strchr("sSpdDioOuUxXcCb%", tab->format[tab->i]))
   {
     handle_display(tab, tab->format[tab->i]);

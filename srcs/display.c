@@ -77,10 +77,18 @@ static void convert_pointer(t_printf *tab)
 
 static void convert_char_and_string(t_printf *tab, char c)
 {
+  char *tmp;
+
   if (c == 'c')
     tab->output = ft_memset(ft_strnew(2), va_arg(tab->args, int), 1);
   else if (c == 's')
-    tab->output = va_arg(tab->args, char*);
+  {
+    tmp = va_arg(tab->args, char*);
+    if (tmp == 0)
+      tab->output = ft_strdup("(null)");
+    else
+      tab->output = tmp;
+  }
 }
 
 /*

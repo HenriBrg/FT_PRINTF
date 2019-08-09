@@ -56,6 +56,8 @@ static int set_width(t_printf *tab)
 {
   if (ft_isdigit(tab->format[tab->i]))
   {
+    while (tab->format[tab->i] == '0')
+      tab->i++;
     tab->width = ft_atoi(&tab->format[tab->i]);
     tab->i += ft_strlen(ft_itoa(tab->width));
     tab->widthConfig = 1;
@@ -68,6 +70,9 @@ static int set_width(t_printf *tab)
 **  set_precision() gère ça la précision si un . est détecté
 **  On saute le . puis on atoi le nombre qui suit et incrémente i
 **  par de la taille de ce nombre
+**  Le while intervient pour gérer les éventuels 0 dans ft_printf("%.09s", "hi low");
+**  afin que i soit correctement incrémenté, sans quoi, dans le cas ci dessus,
+**  i serait incrémenté seulement de 1 car strlen atoi (09) = 1
 */
 
 static int set_precision(t_printf *tab)
@@ -75,6 +80,8 @@ static int set_precision(t_printf *tab)
   if (tab->format[tab->i] == '.')
   {
     tab->i++;
+    while (tab->format[tab->i] == '0')
+      tab->i++;
     if (!ft_isdigit(tab->format[tab->i]))
     {
       tab->precisionConfig = 1;

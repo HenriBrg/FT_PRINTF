@@ -10,22 +10,24 @@
 
 char *prefix(t_printf *tab, char c)
 {
+  int size;
   char *prefix;
 
+  size = ft_strlen(tab->output);
   // Préfixes possibles : - + 0 0x 0X et ' ' et uniquement sur les nombres
   if (ft_strchr("dDioOuUxX", c) == NULL)
     return (0);
-  if (tab->output[0] == '-')
+  if (size >= 1 && tab->output[0] == '-')
     prefix = ft_strdup("-");
-  else if (tab->output[0] == '+')
+  else if (size >= 1 && tab->output[0] == '+')
     prefix = ft_strdup("+");
-  else if ((c == 'o' || c == 'O') && tab->output[0] == '0')
+  else if (size >= 1 && (c == 'o' || c == 'O') && tab->output[0] == '0')
     prefix = ft_strdup("0");
-  else if (tab->output[0] == ' ')
+  else if (size >= 1 && tab->output[0] == ' ')
     prefix = ft_strdup(" ");
-  else if (tab->output[0] == '0' && tab->output[1] == 'x')
+  else if (size >= 2 && tab->output[0] == '0' && tab->output[1] == 'x')
     prefix = ft_strdup("0x");
-  else if (tab->output[0] == '0' && tab->output[1] == 'X')
+  else if (size >= 2 && tab->output[0] == '0' && tab->output[1] == 'X')
     prefix = ft_strdup("0X");
   else
     prefix = NULL;
@@ -50,14 +52,19 @@ void apply_precision(t_printf *tab, char c)
   char *tmp;
   char *strprefix;
 
-  if (ft_strchr("dDioOuUxX", c) && tab->precisionConfig
-                                && tab->precision > (int)ft_strlen(tab->output))
+
+  if (ft_strchr("dDioOuUxX", c) && tab->precisionConfig) // && tab->precision > (int)ft_strlen(tab->output))
   {
     strprefix = prefix(tab, c);
+    prefix_size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
+    if (tab->precision == 0 && ft_atoi(tab->output + prefix_size) == 0)
+    {
+      tab->output = ft_strjoin(strprefix, ft_strnew(1));
+      return ;
+    }
     size = ft_strlen(tab->output);
     tmp = ft_strnew(size + (tab->precision - size));
     i = -1;
-    prefix_size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
     while (++i < tab->precision - size + prefix_size)
       tmp[i] = '0';
     if (strprefix != 0)
@@ -85,10 +92,12 @@ void apply_width(t_printf *tab)
   char *tmp;
   char *strprefix;
 
+  c = (tab->zero == 1) ? '0' : ' ';
   strprefix = (tab->zero == 1) ? prefix(tab, tab->format[tab->i]) : 0;
-  if (tab->width > (int)ft_strlen(tab->output))
+  if (tab->output == 0)
+    tab->output = ft_memset(ft_strnew(tab->width), c, tab->width);
+  else if (tab->width > (int)ft_strlen(tab->output))
   {
-    c = (tab->zero == 1) ? '0' : ' ';
     size = ft_strlen(tab->output);
     tmp = ft_strnew(size + (tab->width - size));
     i = -1;
@@ -109,7 +118,7 @@ void apply_width(t_printf *tab)
 
 void apply_flags(t_printf *tab, char c)
 {
-  if (tab->plus && ft_strchr("idD", c) && tab->output[0] != '-')
+  if (tab->plus && ft_strchr("idD", c) && !ft_strchr(tab->output, '-'))
     tab->output = ft_strjoin("+", tab->output);
   else if (tab->space && ft_strchr("idD", c) && !ft_strchr(tab->output, '-'))
       tab->output = ft_strjoin(" ", tab->output);
@@ -136,6 +145,7 @@ void apply_config(t_printf *tab)
   int place;
   int min_plus;
   char *tmp;
+
 
   apply_flags(tab, tab->format[tab->i]);
   if (tab->precisionConfig && ft_strchr("dDiOouUxXsScC", tab->format[tab->i]))
