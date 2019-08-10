@@ -2,5 +2,7 @@
 
 2) 09/08 21H : Tests completed. 1549/2437 tests passed.
 
-3) Le code commence à ne plus être propre ...
-   Target : faire un algo qui marche à 100% puis le rendre propre ensuite
+Le code commence à ne plus être propre ...
+Target : faire un algo qui marche à 100% puis le rendre propre ensuite
+
+3) 10/08 19H : 1694 / 2437

@@ -107,7 +107,8 @@ void  handle_display(t_printf *tab, char c)
 {
   if (c == 'i' || c == 'd' || c == 'D')
     convert_int(tab);
-  else if (c == 'o' || c == 'u' || c == 'U' || c == 'x' || c == 'X' || c == 'b')
+  else if (c == 'o' || c == 'u' || c == 'U' || c == 'x' || c == 'X' || c == 'b'
+                    || c == 'O')
     convert_unsigned_int(tab, c);
   else if (c == 'p')
     convert_pointer(tab);

@@ -6,6 +6,7 @@
 ** 2 > Il y a une précision
 ** S'il y a une width sans flag '0', il n'y a pas besoin de mettre de prefixe
 ** au début
+** Préfixes possibles : - + 0 0x 0X et ' ' et uniquement sur les nombres
 */
 
 char *prefix(t_printf *tab, char c)
@@ -14,20 +15,19 @@ char *prefix(t_printf *tab, char c)
   char *prefix;
 
   size = ft_strlen(tab->output);
-  // Préfixes possibles : - + 0 0x 0X et ' ' et uniquement sur les nombres
   if (ft_strchr("dDioOuUxX", c) == NULL)
     return (0);
   if (size >= 1 && tab->output[0] == '-')
     prefix = ft_strdup("-");
   else if (size >= 1 && tab->output[0] == '+')
     prefix = ft_strdup("+");
-  else if (size >= 1 && (c == 'o' || c == 'O') && tab->output[0] == '0')
-    prefix = ft_strdup("0");
   else if (size >= 1 && tab->output[0] == ' ')
     prefix = ft_strdup(" ");
-  else if (size >= 2 && tab->output[0] == '0' && tab->output[1] == 'x')
+  else if (tab->hash && size >= 1 && (c == 'o' || c == 'O') && tab->output[0] == '0')
+    prefix = ft_strdup("0");
+  else if (tab->hash && size >= 2 && tab->output[0] == '0' && tab->output[1] == 'x')
     prefix = ft_strdup("0x");
-  else if (size >= 2 && tab->output[0] == '0' && tab->output[1] == 'X')
+  else if (tab->hash && size >= 2 && tab->output[0] == '0' && tab->output[1] == 'X')
     prefix = ft_strdup("0X");
   else
     prefix = NULL;
@@ -35,7 +35,17 @@ char *prefix(t_printf *tab, char c)
 }
 
 /*
-** apply_precision intervient sur les nombres SI leur taille est inférieur à la précision donnée
+** Alors ici c'est un peu compliqué (en partie à cause des 25 lignes maximum)
+**
+** apply_precision intervient (avant apply_width) si tab->precisionConfig = 1
+** ft_strlen(strprefix) dans un if car sinon on segfault si strprefix = 0
+** Si la precision vaut 0 et que l'argument va_arg = 0, c'est un cas unique
+** dans lequel on renvoie l'éventuel prefixe (0, 0x, 0X, +, ...)
+**
+** Autre cas unique (if (strprefix != 0 && ...), si il y a un prefixe et qu'on est dans un conversion %#o
+** alors le 0 de prefixe octal est considéré commme un 0 remplissant
+** (au sens des 0 que la précision remplit)
+**
 ** S'il y a un prefixe (ex : 0x), il est stocké dans strprefix
 ** La précision ne prend pas en compte le préfixe : exemple :
 ** PRECI HEX INT   via %.5x avec     42   : 0x0002a (on a 0002a de taille 5 = précision) puis le préfix
@@ -52,25 +62,23 @@ void apply_precision(t_printf *tab, char c)
   char *tmp;
   char *strprefix;
 
-
-  if (ft_strchr("dDioOuUxX", c) && tab->precisionConfig) // && tab->precision > (int)ft_strlen(tab->output))
+  if (ft_strchr("dDioOuUxX", c) && tab->precisionConfig)
   {
     strprefix = prefix(tab, c);
     prefix_size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
-    if (tab->precision == 0 && ft_atoi(tab->output + prefix_size) == 0)
+    if ((i = -1) && tab->precision == 0 && ft_atoi(tab->output + prefix_size) == 0)
     {
       tab->output = ft_strjoin(strprefix, ft_strnew(1));
       return ;
     }
     size = ft_strlen(tab->output);
     tmp = ft_strnew(size + (tab->precision - size));
-    i = -1;
     while (++i < tab->precision - size + prefix_size)
       tmp[i] = '0';
-    if (strprefix != 0)
-      tmp = ft_strjoin(strprefix, tmp);
     size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
     tab->output = ft_strjoin(tmp, tab->output + size);
+    if (strprefix != 0 && !(c == 'o' && tab->output[0] == '0'))
+        tab->output = ft_strjoin(strprefix, tab->output);
     free(tmp);
   }
   else if ((c == 's' || c == 'S') && tab->precisionConfig == 1)
@@ -78,10 +86,19 @@ void apply_precision(t_printf *tab, char c)
 }
 
 /*
-** apply_width intervient sur les nombres et string SI leur taille est inférieur à la width donnée
-** Elle détermine la taille maximale de l'output (au sens de strlen(output)) et prend donc en compte
-** la taille de l'éventuel préfixe (à l'inverse de la précision).
+** apply_width intervient sur les nombres et string SI leur taille est inférieur
+** à la width donnée
+** Elle détermine la taille maximale de l'output (au sens de strlen(output)) et
+** prend donc en compte la taille de l'éventuel du préfixe
+** (à l'inverse de la précision).
+**
 ** Si le flag 0 est activé, le remplissage se fera par des 0 et non des ' '
+**
+** Si l'output est nul, pour x raisons (par exemple, apply_precision() aura
+** assigné tab->output à ft_strjoin(strprefix, ft_strnew(1)) qui peut parfois
+** être nul, ou encore si va_arg retourne 0), on rempli simplement tab->output
+** de 0 ou de ' ' selon la width
+**
 */
 
 void apply_width(t_printf *tab)
@@ -114,6 +131,7 @@ void apply_width(t_printf *tab)
 /*
 ** Les flags + ' ' # sont gérés dans apply_flags
 ** (Le flag '-' sera géreé tout à la fin et le flag '0' sera géré dans width())
+** // Faille potentielle ligne 124 (if tab->hash) si il y a un prefix + ou ' ' avant le '0' recherché
 */
 
 void apply_flags(t_printf *tab, char c)
@@ -122,7 +140,7 @@ void apply_flags(t_printf *tab, char c)
     tab->output = ft_strjoin("+", tab->output);
   else if (tab->space && ft_strchr("idD", c) && !ft_strchr(tab->output, '-'))
       tab->output = ft_strjoin(" ", tab->output);
-  else if (tab->hash && ft_strchr("xXoO", c))
+  else if (tab->hash && ft_strchr("xXoO", c) && tab->output[0] != '0')
   {
     if (c == 'o' || c == 'O')
       tab->output = ft_strjoin("0", tab->output);
@@ -145,7 +163,6 @@ void apply_config(t_printf *tab)
   int place;
   int min_plus;
   char *tmp;
-
 
   apply_flags(tab, tab->format[tab->i]);
   if (tab->precisionConfig && ft_strchr("dDiOouUxXsScC", tab->format[tab->i]))

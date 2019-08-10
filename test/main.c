@@ -2,7 +2,8 @@
 
 int main()
 {
-  ft_printf("%5.0i\n", 0);
-     printf("%5.0i\n", 0);
+  ft_printf("");
+     printf("");
+
   return (0);
 }
