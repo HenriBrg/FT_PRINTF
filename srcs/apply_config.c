@@ -151,7 +151,8 @@ void apply_flags(t_printf *tab, char c)
   }
 }
 
-/* Ordre d'application de la config :
+/*
+** Ordre d'application de la config :
 ** 1/ Flags + (ajoute + ou -), flag ' ' (ajoute +) et flag # (ajoute 0, 0x, 0X)
 ** 2/ Width (width combiné ou non au flag 0) OU Précision (qui par défaut remplit par 0)
 ** 3/ Gestion du flag '-' et gestion de l'exception avec flag '-' et flag ' ' sur un int positif (qui aura un prefixe ' ')
