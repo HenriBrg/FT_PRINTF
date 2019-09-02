@@ -61,7 +61,6 @@ typedef struct s_printf {
 
 }              t_printf;
 
-void show_config(t_printf *tab);
 void set_config(t_printf *tab);
 void handle_display(t_printf *tab, char c);
 void convert_wchart_and_wstring(t_printf *tab, char c);

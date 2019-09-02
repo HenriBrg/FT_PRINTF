@@ -1,13 +1,15 @@
 #include "../includes/ft_printf.h"
 
 /*
-** RAS
+** convert_int() intervient pour les conversion d'int signés
+** intmax_toa_base gère tous les types de nombres signés
 */
 
 static void convert_int(t_printf *tab)
 {
   intmax_t n;
 
+  n = 0;
   if (tab->h)
     n = (short)va_arg(tab->args, int);
   else if (tab->hh)
@@ -26,7 +28,8 @@ static void convert_int(t_printf *tab)
 }
 
 /*
-** RAS
+** convert_unsigned_int() intervient pour toutes les conversion d'unsigned int
+** uintmax_toa_base gère tous les types de nombres non signés
 */
 
 static void convert_unsigned_int(t_printf *tab, char c)
@@ -60,7 +63,7 @@ static void convert_unsigned_int(t_printf *tab, char c)
 }
 
 /*
-** RAS
+** convert_pointer() intervient pour la conversion %p
 */
 
 static void convert_pointer(t_printf *tab)
@@ -72,7 +75,8 @@ static void convert_pointer(t_printf *tab)
 }
 
 /*
-** RAS
+** convert_char_and_string() intervient pour les conversion %s et %c
+** NB : la vraie fonction printf affiche (null) si la valeur de l'arg est nulle
 */
 
 static void convert_char_and_string(t_printf *tab, char c)

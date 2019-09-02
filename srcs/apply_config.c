@@ -2,8 +2,8 @@
 
 /*
 ** La fonction prefix n'intervient que si
-** 1 > Il y a une width et le flag '0' est présent
-** 2 > Il y a une précision
+** 1 : Il y a une width et le flag '0' est présent
+** 2 : Il y a une précision
 ** S'il y a une width sans flag '0', il n'y a pas besoin de mettre de prefixe
 ** au début
 ** Préfixes possibles : - + 0 0x 0X et ' ' et uniquement sur les nombres
@@ -131,7 +131,7 @@ void apply_width(t_printf *tab)
 /*
 ** Les flags + ' ' # sont gérés dans apply_flags
 ** (Le flag '-' sera géreé tout à la fin et le flag '0' sera géré dans width())
-** // Faille potentielle ligne 124 (if tab->hash) si il y a un prefix + ou ' ' avant le '0' recherché
+** Faille potentielle ligne 124 (if tab->hash) si il y a un prefix + ou ' ' avant le '0' recherché
 */
 
 void apply_flags(t_printf *tab, char c)

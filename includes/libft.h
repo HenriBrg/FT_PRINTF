@@ -57,6 +57,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int 	ft_strequ(char const *s1, char const *s2);
 int 	ft_strnequ(char const *s1, char const *s2, size_t n);
 int		ft_get_next_line(const int fd, char **line);
+int  	ft_printf(const char *format, ...);
 
 size_t		ft_strlen(const char *str);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);

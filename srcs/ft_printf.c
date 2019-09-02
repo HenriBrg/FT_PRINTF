@@ -1,5 +1,9 @@
 #include "../includes/ft_printf.h"
 
+/*
+** resetConfig() intervient pour chaque conversion (c.a.d occurence de %)
+*/
+
 static void resetConfig(t_printf *tab)
 {
   tab->output    = 0;
@@ -89,6 +93,23 @@ static void dispatch(t_printf *tab)
 }
 
 /*
+** end() libère la structure tab et son contenu et retourne
+** tmp qui vaut le returnSize de la structure (c.a.d la valeur retournée
+** par ft_printf)
+*/
+
+static int end(t_printf *tab)
+{
+  int tmp;
+
+  tmp = tab->returnSize;
+  if (tab->output)
+    free(tab->output);
+  free(tab);
+  return (tmp);
+}
+
+/*
 ** On itère sur *format et dès que l'on détecte un %
 ** on appel dispatch() (sauf si %%)
 */
@@ -120,5 +141,5 @@ int ft_printf(const char *format, ...)
       tab->i++;
     }
   }
-  return (tab->returnSize);
+  return(end(tab));
 }

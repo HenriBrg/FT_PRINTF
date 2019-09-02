@@ -79,10 +79,10 @@ size_t wcstrlen(const wchar_t *s)
 **  strwchar_to_str() est la clé de voute pour le %S de printf
 ** 1 - On détermine la taille de la chaine de wchar_t avec wcstrlen() (code source de la fonction système wcslen)
 ** 2 - On alloue str avec la taille nécessaire pour accueilir chaque wchar_t
-**     Exemple :  'a' en wchar_t possède une size de 1 (bytes ?) obtenue via getSizeWchar()
-                  '' en wchar_t possède une size de 3 (bytes ?)
-                  'b' en wchar_t possède une size de 1 (bytes ?)
-                  '𝄞' en wchar_t possède une size de 4 (bytes ?)
+**     Exemple :  'a' en wchar_t possède une size de 1 (bytes, == octet) obtenue via getSizeWchar()
+                  '' en wchar_t possède une size de 3 (bytes, == octet)
+                  'b' en wchar_t possède une size de 1 (bytes, == octet)
+                  '𝄞' en wchar_t possède une size de 4 (bytes, == octet)
 
                   Au total on a besoin d'un chaine de taille (1 + 3 + 1 + 4) + 1
 ** 3 - On appel wchar_to_str() sur chaque wchar_t de la chaine de wchar_t

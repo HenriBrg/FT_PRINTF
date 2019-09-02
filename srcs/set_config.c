@@ -4,6 +4,8 @@
 ** Pour débugger
 */
 
+/*
+
 void show_config(t_printf *tab)
 {
   printf("\n");
@@ -27,10 +29,13 @@ void show_config(t_printf *tab)
   printf("preciConf : %d\n", tab->precisionConfig );
 }
 
+*/
+
 /*
 **  set_flags active la valeur du flag en structure
-**  s'il est détecté et incrémente i
+**  s'il est détecté et incrémente i (index de position dans la string format)
 */
+
 static int set_flags(t_printf *tab)
 {
   if (tab->format[tab->i] == '-' && tab->i++)
@@ -48,8 +53,8 @@ static int set_flags(t_printf *tab)
 
 
 /*
-** set_width() intervient si on tombe sur un chiffre
-** avec atoi et incrément i de la taille du nombre
+** set_width() intervient si on tombe sur un chiffre, via
+** atoi et en incrémentant i de la taille du nombre
 */
 
 static int set_width(t_printf *tab)
@@ -122,7 +127,9 @@ static int set_size(t_printf *tab)
 
 
 /*
-** RAS
+** set_config() appelle les 4 fonctions ci-dessus et return dès que l'une
+** d'elle modifie la config (si elle ne return pas, il pourrait y avoir des
+** doublons lors de la détection des chiffres, etc ...)
 */
 
 void set_config(t_printf *tab)

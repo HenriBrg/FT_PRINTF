@@ -2,8 +2,8 @@
 
 int main()
 {
-  ft_printf("");
-     printf("");
+  ft_printf("%d - \n", ft_printf("Hello"));
+  printf("%d - \n", printf("Hello"));
 
   return (0);
 }
