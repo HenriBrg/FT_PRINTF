@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/15 18:33:40 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/16 15:52:51 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ static void		convert_char_and_string(t_printf *tab, char c)
 	char	*tmp;
 
 	if (c == 'c')
+	{
 		tab->output = ft_memset(ft_strnew(2), va_arg(tab->args, int), 1);
+
+	}
 	else if (c == 's')
 	{
 		tmp = va_arg(tab->args, char*);
@@ -110,14 +113,6 @@ static void		convert_char_and_string(t_printf *tab, char c)
 
 /*
 ** La fonction handleDisplay() gère le type et la size/length (4 & 5)
-**
-** hh	Convert a variable of type char to integer and print
-** h	Convert a variable of type short to integer and print
-** l	For integers, a variable of type long is expected
-** ll	For integers, a variable of type long long is expected
-** L	For floating point, a variable of type long double is expected
-** z	For integers, an argument is expected of type size_t
-** j  For integers, an argument is expected of type intmax_t
 */
 
 void			handle_display(t_printf *tab, char c)

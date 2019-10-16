@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/15 18:54:33 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/16 15:11:01 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ int			ft_printf(const char *format, ...)
 	tab->format = (char*)format;
 	reset_config(tab);
 	while (tab->format[tab->i] != '\0')
-	{
 		if (tab->format[tab->i] == '%' && tab->format[tab->i + 1] == '%')
 		{
 			write(1, "%", 1);
@@ -150,6 +149,5 @@ int			ft_printf(const char *format, ...)
 			tab->returnSize += 1;
 			tab->i++;
  		}
-	}
 	return (end(tab));
 }
