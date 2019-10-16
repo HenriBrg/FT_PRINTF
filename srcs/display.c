@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/16 15:52:51 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/16 22:09:43 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,15 @@ static void		convert_unsigned_int(t_printf *tab, char c)
 	else
 		n = va_arg(tab->args, unsigned int);
 	if (c == 'o' || c == 'O')
-		tab->output = ft_Uintmaxt_toa_base("01234567", n);
+		tab->output = ft_uintmaxt_toa_base("01234567", n);
 	else if (c == 'u' || c == 'U')
-		tab->output = ft_Uintmaxt_toa_base("0123456789", n);
+		tab->output = ft_uintmaxt_toa_base("0123456789", n);
 	else if (c == 'x')
-		tab->output = ft_Uintmaxt_toa_base("0123456789abcdef", n);
+		tab->output = ft_uintmaxt_toa_base("0123456789abcdef", n);
 	else if (c == 'X')
-		tab->output = ft_Uintmaxt_toa_base("0123456789ABCDEF", n);
+		tab->output = ft_uintmaxt_toa_base("0123456789ABCDEF", n);
 	else if (c == 'b')
-		tab->output = ft_Uintmaxt_toa_base("01", n);
+		tab->output = ft_uintmaxt_toa_base("01", n);
 }
 
 /*
@@ -84,7 +84,7 @@ static void		convert_pointer(t_printf *tab)
 
 	ptr = (unsigned long long int)va_arg(tab->args, void*);
 	tab->output = ft_strjoin("0x",
-							ft_Uintmaxt_toa_base("0123456789abcdef", ptr));
+							ft_uintmaxt_toa_base("0123456789abcdef", ptr));
 }
 
 /*
