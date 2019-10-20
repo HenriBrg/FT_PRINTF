@@ -30,34 +30,34 @@ Approche possible pour gérer les types de variable tous en même temps
 
 typedef struct s_printf {
 
-  va_list args;
-  char    *format;
-  char    *output;
-  int     i;
-  int     returnSize;
-  /*
-  ** Pour gérer les flags -+0# et ' ' (espace)
-  */
-  int			minus;
+	va_list args;
+	char    *format;
+	char    *output;
+	int     i;
+	int     returnSize;
+	/*
+	** Pour gérer les flags -+0# et ' ' (espace)
+	*/
+	int			minus;
 	int			plus;
 	int			space;
 	int			zero;
 	int			hash;
-  /*
-  ** Pour gérer les size/length (h, hh, l, ll, j, z)
-  ** https://docs.microsoft.com/fr-fr/cpp/c-runtime-library/format-specification-syntax-printf-and-wprintf-functions?view=vs-2019
-  */
-  int     h;
-  int     hh;
-  int     l;
-  int     ll;
-  int     j;
-  int     z;
+	/*
+	** Pour gérer les size/length (h, hh, l, ll, j, z)
+	** https://docs.microsoft.com/fr-fr/cpp/c-runtime-library/format-specification-syntax-printf-and-wprintf-functions?view=vs-2019
+	*/
+	int     h;
+	int     hh;
+	int     l;
+	int     ll;
+	int     j;
+	int     z;
 
-  int    width;
-  int    widthConfig; // Booléen
-  int    precision;
-  int    precisionConfig; // Booléen
+	int    width;
+	int    widthConfig;
+	int    precision;
+	int    precisionConfig;
 
 }              t_printf;
 

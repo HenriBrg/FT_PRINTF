@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/16 22:09:43 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/20 17:05:49 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,22 @@ static void		convert_pointer(t_printf *tab)
 /*
 ** convert_char_and_string() intervient pour les conversion %s et %c
 ** NB : la vraie fonction printf affiche (null) si la valeur de l'arg est nulle
+**
+** L'int exception gere le cas d'un %.2c
 */
 
 static void		convert_char_and_string(t_printf *tab, char c)
 {
+	int		exception;
 	char	*tmp;
 
 	if (c == 'c')
 	{
-		tab->output = ft_memset(ft_strnew(2), va_arg(tab->args, int), 1);
-
+		exception = va_arg(tab->args, int);
+		if (exception == 0 && tab->precision > 0 && tab->precisionConfig)
+			tab->output = ft_strdup("^@");
+		else
+			tab->output = ft_memset(ft_strnew(2), exception, 1);
 	}
 	else if (c == 's')
 	{
