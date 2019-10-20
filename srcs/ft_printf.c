@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/16 21:13:37 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/20 20:21:56 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 static void		reset_config(t_printf *tab)
 {
 	tab->output    = 0;
+	tab->stderr    = 0;
 	tab->minus     = 0;
 	tab->plus      = 0;
 	tab->space     = 0;
@@ -82,6 +83,15 @@ static void		control_config(t_printf *tab, char c)
 **
 */
 
+static void 	print(t_printf *tab)
+{
+	if (tab->stderr)
+		ft_putstr_fd(tab->output, 1);
+	else
+		ft_putstr_fd(tab->output, 1);
+
+}
+
 static void		dispatch(t_printf *tab)
 {
 	tab->i++;
@@ -95,7 +105,10 @@ static void		dispatch(t_printf *tab)
 	{
 		handle_display(tab, tab->format[tab->i]);
 		apply_config(tab);
-		ft_putstr(tab->output);
+
+		//show_config(tab);
+		print(tab);
+
 		if (tab->output)
 			tab->returnSize += (int)ft_strlen(tab->output);
 	  	reset_config(tab);

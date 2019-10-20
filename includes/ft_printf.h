@@ -35,6 +35,7 @@ typedef struct s_printf {
 	char    *output;
 	int     i;
 	int     returnSize;
+	int		stderr;
 	/*
 	** Pour gérer les flags -+0# et ' ' (espace)
 	*/
@@ -62,6 +63,7 @@ typedef struct s_printf {
 }              t_printf;
 
 void set_config(t_printf *tab);
+void show_config(t_printf *tab);
 void handle_display(t_printf *tab, char c);
 void convert_wchart_and_wstring(t_printf *tab, char c);
 void apply_config(t_printf *tab);

@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 17:17:16 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/16 22:11:16 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/20 18:09:24 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int				ft_isalpha(int c);
 void			ft_putchar(char c);
 void			ft_putnbr(int nb);
 void			ft_putstr(const char *str);
+void			ft_putendl_fd(char *s, int fd);
+void			ft_putstr_fd(char *s, int fd);
+
 
 /*
 ** Fonctions sur les strings

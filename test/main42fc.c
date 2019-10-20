@@ -3,8 +3,24 @@
 int	main()
 {
 
-	// write(1 , "\0", 1);
-	printf("-->%.2c\n", NULL);
-	ft_printf("-->%.2c\n", NULL);
+	ft_putstr_fd("hello stderr", 2);
+	// write(1 , "\0", 1); // cat -e
+
+	ft_printf("%.2c\n", NULL);
+	ft_printf("@moulitest: %c\n", 0);
+	ft_printf("%2c\n", 0);
+	ft_printf("null %c and text\n", 0);
+	ft_printf("% c\n", 0);
+
+	printf("------------------------\n");
+
+	printf("%.2c\n", NULL);
+	printf("@moulitest: %c\n", 0);
+	printf("%2c\n", 0);
+	printf("null %c and text\n", 0);
+	printf("% c\n", 0);
+
 	return (0);
 }
+
+// make && gcc -w test/main42fc.c -L. libftprintf.a && ./a.out | cat -e
