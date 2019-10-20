@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/20 20:14:20 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/20 21:18:03 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void		convert_int(t_printf *tab)
 
 static void		convert_unsigned_int(t_printf *tab, char c)
 {
-	uintmax_t n;
+	uintmax_t	n;
 
 	if (tab->h)
 		n = (unsigned short)va_arg(tab->args, unsigned int);
@@ -80,11 +80,13 @@ static void		convert_unsigned_int(t_printf *tab, char c)
 
 static void		convert_pointer(t_printf *tab)
 {
+	char 		*tmp;
 	uintmax_t	ptr;
 
 	ptr = (unsigned long long int)va_arg(tab->args, void*);
-	tab->output = ft_strjoin("0x",
-							ft_uintmaxt_toa_base("0123456789abcdef", ptr));
+	tmp = ft_uintmaxt_toa_base("0123456789abcdef", ptr);
+	tab->output = ft_strjoin("0x", tmp);
+	free(tmp);
 }
 
 /*
@@ -109,6 +111,9 @@ static void		convert_char_and_string(t_printf *tab, char c)
 	}
 	else if (c == 's')
 	{
+		/*
+		D'un % à un autre, tab->output est reinitialisé, mais pas free
+		*/
 		tmp = va_arg(tab->args, char*);
 		if (tmp == 0)
 			tab->output = ft_strdup("(null)");
@@ -132,8 +137,6 @@ void			handle_display(t_printf *tab, char c)
 		convert_pointer(tab);
 	else if (c == 's' || c == 'c')
 		convert_char_and_string(tab, c);
-	else if (c == 'S' || c == 'C')
-		convert_wchart_and_wstring(tab, c);
 	else if (c == '%')
 		tab->output = ft_memset(ft_strnew(2), '%', 1);
 }

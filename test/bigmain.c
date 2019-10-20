@@ -22,11 +22,9 @@ int main()
   // L'é'  a une sizeof de 2
   // L''  a une sizeof de 3
   // L'𝄞'  a une sizeof de 4
-  wchar_t                m = L'é';
-  wchar_t                *n = L"éab𝄞d";
-
-
-  setlocale(LC_ALL, "");
+  //wchar_t                m = L'é';
+  //wchar_t                *n = L"éab𝄞d";
+  //setlocale(LC_ALL, "");
 
   printf("\n   ---------- FT_PRINTF -----------\n");
   ft_printf("   INT    via %%d   : %d\n", a);
@@ -41,8 +39,8 @@ int main()
   ft_printf("   PTR    via %%p   : %p\n", j);
   ft_printf("   CHAR   via %%c   : %c\n", k);
   ft_printf("   STR    via %%s   : %s\n", l);
-  ft_printf("   WCHAR  via %%C   : %C\n", m);
-  ft_printf("   WCHAR* via %%S   : %S\n", n);
+  //ft_printf("   WCHAR  via %%C   : %C\n", m);
+  //ft_printf("   WCHAR* via %%S   : %S\n", n);
   ft_printf("   OCT INT   via %%o avec     42     : %o\n", 42);
   ft_printf("   OCT INT   via %%o avec     -42    : %o\n", -42);
   ft_printf("   HEX INT   via %%x avec     42     : %x\n", 42);
@@ -64,8 +62,8 @@ int main()
   printf("   PTR    via %%p   : %p\n", j);
   printf("   CHAR   via %%c   : %c\n", k);
   printf("   STR    via %%s   : %s\n", l);
-  printf("   WCHAR  via %%C   : %C\n", m);
-  printf("   WCHAR* via %%S   : %S\n", n);
+  //printf("   WCHAR  via %%C   : %C\n", m);
+  //printf("   WCHAR* via %%S   : %S\n", n);
   printf("   OCT INT   via %%o avec     42     : %o\n", 42);
   printf("   OCT INT   via %%o avec     -42    : %o\n", -42);
   printf("   HEX INT   via %%x avec     42     : %x\n", 42);
@@ -138,6 +136,11 @@ int main()
 
 
   printf("\n");
-
   return (0);
+}
+
+__attribute__((destructor))void destructeur()
+{
+	printf("destructor\n");
+	while(1);
 }

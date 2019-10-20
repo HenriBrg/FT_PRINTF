@@ -5,16 +5,15 @@
 
 NAME = libftprintf.a
 
-SRCS = srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/wchar.c \
-			 srcs/apply_config.c
+SRCS = srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/apply_config.c
 
 OBJS = ${SRCS:.c=.o}
 
 CFLAGS = -Wall -Wextra -Werror
 
-ifndef VERBOSE
-.SILENT:
-endif
+# ifndef VERBOSE
+# .SILENT:
+# endif
 
 all: $(NAME)
 

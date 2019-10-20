@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:22:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/15 18:28:37 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/20 21:15:04 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	apply_precision(t_printf *tab, char c)
 			tab->output = ft_strjoin(strprefix, tab->output);
 		free(tmp);
 	}
-	else if ((c == 's' || c == 'S') && tab->precisionConfig == 1)
+	else if (c == 's' && tab->precisionConfig == 1)
 		tab->output = ft_strndup(tab->output, tab->precision);
 }
 
@@ -157,18 +157,27 @@ void	apply_width(t_printf *tab)
 
 void	apply_flags(t_printf *tab, char c)
 {
+	char *tmp;
+
+	tmp = NULL;
 	if (tab->plus && ft_strchr("idD", c) && !ft_strchr(tab->output, '-'))
-		tab->output = ft_strjoin("+", tab->output);
+		tmp = ft_strjoin("+", tab->output);
 	else if (tab->space && ft_strchr("idD", c) && !ft_strchr(tab->output, '-'))
-		tab->output = ft_strjoin(" ", tab->output);
+		tmp = ft_strjoin(" ", tab->output);
 	else if (tab->hash && ft_strchr("xXoO", c) && tab->output[0] != '0')
 	{
 		if (c == 'o' || c == 'O')
-			tab->output = ft_strjoin("0", tab->output);
+			tmp = ft_strjoin("0", tab->output);
 		else if (c == 'x')
-			tab->output = ft_strjoin("0x", tab->output);
+			tmp = ft_strjoin("0x", tab->output);
 		else if (c == 'X')
-			tab->output = ft_strjoin("0X", tab->output);
+			tmp = ft_strjoin("0X", tab->output);
+	}
+	if (tmp)
+	{
+		free(tab->output);
+		tab->output = ft_strdup(tmp);
+		free(tmp);
 	}
 }
 
@@ -189,7 +198,7 @@ void	apply_config(t_printf *tab)
 	char	*tmp;
 
 	apply_flags(tab, tab->format[tab->i]);
-	if (tab->precisionConfig && ft_strchr("dDiOouUxXsScC", tab->format[tab->i]))
+	if (tab->precisionConfig && ft_strchr("dDiOouUxXsc", tab->format[tab->i]))
 		apply_precision(tab, tab->format[tab->i]);
 	if (tab->widthConfig == 1)
 		apply_width(tab);

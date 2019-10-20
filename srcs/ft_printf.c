@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/20 20:21:56 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/20 21:24:42 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@
 
 static void		reset_config(t_printf *tab)
 {
+	/*
+	if (tab->output)
+	{
+	// POURQUOI CA AFFICHE NIMPORTEQUOI AU PREMIER APPEL ? ^Y^Q^]M-^R��^]$
+		printf("----------->%s\n", tab->output);
+		//free(tab->output);
+	}*/
+	/* Impossible de free tab->output ici, why ? */
 	tab->output    = 0;
 	tab->stderr    = 0;
 	tab->minus     = 0;
@@ -86,7 +94,7 @@ static void		control_config(t_printf *tab, char c)
 static void 	print(t_printf *tab)
 {
 	if (tab->stderr)
-		ft_putstr_fd(tab->output, 1);
+		ft_putstr_fd(tab->output, 2);
 	else
 		ft_putstr_fd(tab->output, 1);
 
@@ -101,18 +109,18 @@ static void		dispatch(t_printf *tab)
 	control_config(tab, tab->format[tab->i]);
 	if (tab->format[tab->i] == '\0')
 		return ;
-	if (ft_strchr("sSpdDioOuUxXcCb%", tab->format[tab->i]))
+	if (ft_strchr("spdDioOuUxXcb%", tab->format[tab->i]))
 	{
 		handle_display(tab, tab->format[tab->i]);
 		apply_config(tab);
 
-		//show_config(tab);
 		print(tab);
 
 		if (tab->output)
 			tab->returnSize += (int)ft_strlen(tab->output);
 	  	reset_config(tab);
 	  	tab->i++;
+		// ? free(tab->output);
 	}
 }
 
@@ -127,8 +135,10 @@ static int	end(t_printf *tab)
 	int	tmp;
 
 	tmp = tab->returnSize;
+	/*
 	if (tab->output)
 		free(tab->output);
+		*/
 	free(tab);
 	return (tmp);
 }

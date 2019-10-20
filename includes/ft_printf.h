@@ -10,11 +10,10 @@ Approche possible pour gérer les types de variable tous en même temps
 
 */
 
-# include <locale.h>
 # include <stdarg.h>
 # include <limits.h>
 # include <stdint.h>
-# include <wchar.h>
+# include <stdio.h>
 
 # include "./libft.h"
 
@@ -65,7 +64,6 @@ typedef struct s_printf {
 void set_config(t_printf *tab);
 void show_config(t_printf *tab);
 void handle_display(t_printf *tab, char c);
-void convert_wchart_and_wstring(t_printf *tab, char c);
 void apply_config(t_printf *tab);
 int  ft_printf(const char *format, ...);
 
