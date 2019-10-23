@@ -2,9 +2,32 @@
 
 int	main()
 {
-	char i = 0;
+	int ret;
 
-	write(1, 0, 1);
+	ret = ft_printf("%.2c\n", NULL);
+	printf("ret -->%d\n", ret);
+	ret = ft_printf("@moulitest: %c\n", 0);
+	printf("ret -->%d\n", ret);
+	ret = ft_printf("%2c\n", 0);
+	printf("ret -->%d\n", ret);
+	ret = ft_printf("null %c and text\n", 0);
+	printf("ret -->%d\n", ret);
+	ret = ft_printf("% c\n", 0);
+	printf("ret -->%d\n", ret);
+
+	printf("\n\n ---------- \n\n");
+
+	ret = printf("%.2c\n", NULL);
+	printf("ret -->%d\n", ret);
+	ret = printf("@moulitest: %c\n", 0);
+	printf("ret -->%d\n", ret);
+	ret = printf("%2c\n", 0);
+	printf("ret -->%d\n", ret);
+	ret = printf("null %c and text\n", 0);
+	printf("ret -->%d\n", ret);
+	ret = printf("% c\n", 0);
+	printf("ret -->%d\n", ret);
+
 
 	return (0);
 }

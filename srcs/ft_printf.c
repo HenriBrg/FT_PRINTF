@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/23 20:43:27 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/23 21:03:54 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,23 @@ static void 	print(t_printf *tab)
 
 	null_arg_char_exception = 0;
 	if (tab->except == 1)
+	{
+		printf("excepttttttttt 1\n");
 		write(1, &null_arg_char_exception, 1);
+
+	}
 	ft_putstr_fd(tab->output, 1);
 	if (tab->except == 2)
+	{
+		printf("excepttttttttt 2 \n");
 		write(1, &null_arg_char_exception, 1);
+	}
+
+	/* Ajout de la size de l'output */
+	if (tab->output)
+		tab->returnSize += (int)ft_strlen(tab->output);
+	if (tab->except)
+		tab->returnSize += 1;
 }
 
 static void		dispatch(t_printf *tab)
@@ -119,8 +132,6 @@ static void		dispatch(t_printf *tab)
 
 		print(tab);
 
-		if (tab->output)
-			tab->returnSize += (int)ft_strlen(tab->output);
 	  	reset_config(tab);
 	  	tab->i++;
 		// ? free(tab->output);
@@ -138,8 +149,6 @@ static int	end(t_printf *tab)
 	int	tmp;
 
 	tmp = tab->returnSize;
-	if (tab->except)
-		tab->returnSize += 1;
 	/*
 	if (tab->output)
 		free(tab->output);
