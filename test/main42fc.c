@@ -3,8 +3,8 @@
 int	main()
 {
 
-	ft_putstr_fd("hello stderr", 2);
-	// write(1 , "\0", 1); // cat -e
+	printf("\n\n  ------------------------\n\n");
+
 
 	ft_printf("%.2c\n", NULL);
 	ft_printf("@moulitest: %c\n", 0);
@@ -12,7 +12,7 @@ int	main()
 	ft_printf("null %c and text\n", 0);
 	ft_printf("% c\n", 0);
 
-	printf("------------------------\n");
+	printf("  ------------------------\n");
 
 	printf("%.2c\n", NULL);
 	printf("@moulitest: %c\n", 0);

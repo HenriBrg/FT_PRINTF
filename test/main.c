@@ -2,6 +2,9 @@
 
 int	main()
 {
+	char i = 0;
+
+	write(1, 0, 1);
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:38:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/20 18:59:28 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/23 20:34:09 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 /*
 ** Pour débugger
 */
-
+/*
 void show_config(t_printf *tab)
 {
   printf("\n");
   printf("Format    : %s\n", tab->format    );
   printf("Format[i] : %c\n", tab->format[tab->i]);
   printf("i         : %d\n", tab->i         );
-  printf("stderr    : %d\n", tab->stderr);
+  printf("except    : %d\n", tab->except);
 
   printf("minus     : %d\n", tab->minus     );
   printf("plus      : %d\n", tab->plus      );
@@ -40,7 +40,7 @@ void show_config(t_printf *tab)
   printf("precision : %d\n", tab->precision );
   printf("preciConf : %d\n", tab->precisionConfig );
 }
-
+*/
 /*
 **  set_flags active la valeur du flag en structure
 **  s'il est détecté et incrémente i (index de position dans la string format)

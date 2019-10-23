@@ -34,7 +34,7 @@ typedef struct s_printf {
 	char    *output;
 	int     i;
 	int     returnSize;
-	int		stderr;
+	int		except;
 	/*
 	** Pour gérer les flags -+0# et ' ' (espace)
 	*/

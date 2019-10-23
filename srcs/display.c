@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/20 21:18:03 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/23 20:35:04 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,14 @@ static void		convert_pointer(t_printf *tab)
 
 static void		convert_char_and_string(t_printf *tab, char c)
 {
-	char	*tmp;
 	int		arg;
+	char	*tmp;
 
 	if (c == 'c')
 	{
 		arg = va_arg(tab->args, int);
-		if (arg == 0 && (tab->stderr = 1))
-			tab->output = ft_strdup("^@");
+		if (arg == 0)
+			tab->except = (tab->width || tab->precision) ? 2 : 1;
 		else
 			tab->output = ft_memset(ft_strnew(2), arg, 1);
 	}

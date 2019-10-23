@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/20 21:24:42 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/23 20:43:27 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void		reset_config(t_printf *tab)
 	}*/
 	/* Impossible de free tab->output ici, why ? */
 	tab->output    = 0;
-	tab->stderr    = 0;
+	tab->except    = 0;
 	tab->minus     = 0;
 	tab->plus      = 0;
 	tab->space     = 0;
@@ -93,11 +93,14 @@ static void		control_config(t_printf *tab, char c)
 
 static void 	print(t_printf *tab)
 {
-	if (tab->stderr)
-		ft_putstr_fd(tab->output, 2);
-	else
-		ft_putstr_fd(tab->output, 1);
+	char	null_arg_char_exception;
 
+	null_arg_char_exception = 0;
+	if (tab->except == 1)
+		write(1, &null_arg_char_exception, 1);
+	ft_putstr_fd(tab->output, 1);
+	if (tab->except == 2)
+		write(1, &null_arg_char_exception, 1);
 }
 
 static void		dispatch(t_printf *tab)
@@ -135,6 +138,8 @@ static int	end(t_printf *tab)
 	int	tmp;
 
 	tmp = tab->returnSize;
+	if (tab->except)
+		tab->returnSize += 1;
 	/*
 	if (tab->output)
 		free(tab->output);
