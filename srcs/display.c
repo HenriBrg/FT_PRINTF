@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/23 20:35:04 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 18:48:28 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,34 +44,32 @@ static void		convert_int(t_printf *tab)
 ** uintmax_toa_base gère tous les types de nombres non signés
 */
 
-static void		convert_unsigned_int(t_printf *tab, char c)
+static void		convert_unsigned_int(t_printf *t, char c)
 {
 	uintmax_t	n;
 
-	if (tab->h)
-		n = (unsigned short)va_arg(tab->args, unsigned int);
-	else if (tab->hh)
-		n = (unsigned char)va_arg(tab->args, unsigned int);
-	else if (tab->l)
-		n = va_arg(tab->args, unsigned long);
-	else if (tab->ll)
-		n = va_arg(tab->args, unsigned long long);
-	else if (tab->j)
-		n = va_arg(tab->args, uintmax_t);
-	else if (tab->z)
-		n = va_arg(tab->args, size_t);
+	if (t->h)
+		n = (unsigned short)va_arg(t->args, unsigned int);
+	else if (t->hh)
+		n = (unsigned char)va_arg(t->args, unsigned int);
+	else if (t->l)
+		n = va_arg(t->args, unsigned long);
+	else if (t->ll)
+		n = va_arg(t->args, unsigned long long);
+	else if (t->j)
+		n = va_arg(t->args, uintmax_t);
 	else
-		n = va_arg(tab->args, unsigned int);
+		n = t->z ? va_arg(t->args, size_t) : va_arg(t->args, unsigned int);
 	if (c == 'o' || c == 'O')
-		tab->output = ft_uintmaxt_toa_base("01234567", n);
+		t->output = ft_uintmaxt_toa_base("01234567", n);
 	else if (c == 'u' || c == 'U')
-		tab->output = ft_uintmaxt_toa_base("0123456789", n);
+		t->output = ft_uintmaxt_toa_base("0123456789", n);
 	else if (c == 'x')
-		tab->output = ft_uintmaxt_toa_base("0123456789abcdef", n);
+		t->output = ft_uintmaxt_toa_base("0123456789abcdef", n);
 	else if (c == 'X')
-		tab->output = ft_uintmaxt_toa_base("0123456789ABCDEF", n);
+		t->output = ft_uintmaxt_toa_base("0123456789ABCDEF", n);
 	else if (c == 'b')
-		tab->output = ft_uintmaxt_toa_base("01", n);
+		t->output = ft_uintmaxt_toa_base("01", n);
 }
 
 /*
@@ -80,11 +78,13 @@ static void		convert_unsigned_int(t_printf *tab, char c)
 
 static void		convert_pointer(t_printf *tab)
 {
-	char 		*tmp;
+	char		*tmp;
 	uintmax_t	ptr;
 
 	ptr = (unsigned long long int)va_arg(tab->args, void*);
 	tmp = ft_uintmaxt_toa_base("0123456789abcdef", ptr);
+	if (tmp[0] == '0')
+		tmp[0] = 0;
 	tab->output = ft_strjoin("0x", tmp);
 	free(tmp);
 }
@@ -105,15 +105,16 @@ static void		convert_char_and_string(t_printf *tab, char c)
 	{
 		arg = va_arg(tab->args, int);
 		if (arg == 0)
+		{
 			tab->except = (tab->width || tab->precision) ? 2 : 1;
+			if (tab->width)
+				tab->width -= 1;
+		}
 		else
 			tab->output = ft_memset(ft_strnew(2), arg, 1);
 	}
 	else if (c == 's')
 	{
-		/*
-		D'un % à un autre, tab->output est reinitialisé, mais pas free
-		*/
 		tmp = va_arg(tab->args, char*);
 		if (tmp == 0)
 			tab->output = ft_strdup("(null)");

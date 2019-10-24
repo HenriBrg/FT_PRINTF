@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:22:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/20 21:15:04 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 17:52:56 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*prefix(t_printf *tab, char c)
 /*
 ** Alors ici c'est un peu compliqué (en partie à cause des 25 lignes maximum)
 **
-** apply_precision intervient (avant apply_width) si tab->precisionConfig = 1
+** apply_precision intervient (avant apply_width) si tab->precision_config = 1
 ** ft_strlen(strprefix) dans un if car sinon on segfault si strprefix = 0
 ** Si la precision vaut 0 et que l'argument va_arg = 0, c'est un cas unique
 ** dans lequel on renvoie l'éventuel prefixe (0, 0x, 0X, +, ...)
@@ -78,23 +78,20 @@ void	apply_precision(t_printf *tab, char c)
 {
 	int		i;
 	int		size;
-	int		prefix_size;
+	int		prx;
 	char	*tmp;
 	char	*strprefix;
 
-	if (ft_strchr("dDioOuUxX", c) && tab->precisionConfig)
+	if (ft_strchr("dDioOuUxX", c) && tab->precision_config)
 	{
 		strprefix = prefix(tab, c);
-		prefix_size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
-		if ((i = -1) && tab->precision == 0 &&
-			ft_atoi(tab->output + prefix_size) == 0)
-		{
-			tab->output = ft_strjoin(strprefix, ft_strnew(1));
-			return ;
-		}
+		prx = (strprefix != 0) ? ft_strlen(strprefix) : 0;
+		if ((i = -1) && tab->precision == 0 && ft_atoi(tab->output + prx) == 0)
+			if ((tab->output = ft_strjoin(strprefix, ft_strnew(1))) || 1)
+				return ;
 		size = ft_strlen(tab->output);
 		tmp = ft_strnew(size + (tab->precision - size));
-		while (++i < tab->precision - size + prefix_size)
+		while (++i < tab->precision - size + prx)
 			tmp[i] = '0';
 		size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
 		tab->output = ft_strjoin(tmp, tab->output + size);
@@ -102,7 +99,7 @@ void	apply_precision(t_printf *tab, char c)
 			tab->output = ft_strjoin(strprefix, tab->output);
 		free(tmp);
 	}
-	else if (c == 's' && tab->precisionConfig == 1)
+	else if (c == 's' && tab->precision_config == 1)
 		tab->output = ft_strndup(tab->output, tab->precision);
 }
 
@@ -198,9 +195,9 @@ void	apply_config(t_printf *tab)
 	char	*tmp;
 
 	apply_flags(tab, tab->format[tab->i]);
-	if (tab->precisionConfig && ft_strchr("dDiOouUxXsc", tab->format[tab->i]))
+	if (tab->precision_config && ft_strchr("dDiOouUxXsc", tab->format[tab->i]))
 		apply_precision(tab, tab->format[tab->i]);
-	if (tab->widthConfig == 1)
+	if (tab->width_config == 1)
 		apply_width(tab);
 	if (tab->minus)
 	{

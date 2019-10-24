@@ -6,41 +6,12 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:38:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/23 20:34:09 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 16:57:21 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-/*
-** Pour débugger
-*/
-/*
-void show_config(t_printf *tab)
-{
-  printf("\n");
-  printf("Format    : %s\n", tab->format    );
-  printf("Format[i] : %c\n", tab->format[tab->i]);
-  printf("i         : %d\n", tab->i         );
-  printf("except    : %d\n", tab->except);
-
-  printf("minus     : %d\n", tab->minus     );
-  printf("plus      : %d\n", tab->plus      );
-  printf("space     : %d\n", tab->space     );
-  printf("zero      : %d\n", tab->zero      );
-  printf("hash      : %d\n", tab->hash      );
-  printf("h         : %d\n", tab->h         );
-  printf("hh        : %d\n", tab->hh        );
-  printf("l         : %d\n", tab->l         );
-  printf("ll        : %d\n", tab->ll        );
-  printf("j         : %d\n", tab->j         );
-  printf("z         : %d\n", tab->z         );
-  printf("width     : %d\n", tab->width     );
-  printf("widthConf : %d\n", tab->widthConfig     );
-  printf("precision : %d\n", tab->precision );
-  printf("preciConf : %d\n", tab->precisionConfig );
-}
-*/
 /*
 **  set_flags active la valeur du flag en structure
 **  s'il est détecté et incrémente i (index de position dans la string format)
@@ -74,7 +45,7 @@ static int	set_width(t_printf *tab)
 			tab->i++;
 		tab->width = ft_atoi(&tab->format[tab->i]);
 		tab->i += ft_strlen(ft_itoa(tab->width));
-		tab->widthConfig = 1;
+		tab->width_config = 1;
 		return (1);
 	}
 	return (0);
@@ -99,13 +70,13 @@ static int	set_precision(t_printf *tab)
 			tab->i++;
 		if (!ft_isdigit(tab->format[tab->i]))
 		{
-			tab->precisionConfig = 1;
+			tab->precision_config = 1;
 			tab->precision = 0;
 			return (1);
 		}
 		tab->precision = ft_atoi(&tab->format[tab->i]);
 		tab->i += ft_strlen(ft_itoa(tab->precision));
-		tab->precisionConfig = 1;
+		tab->precision_config = 1;
 		return (1);
 	}
 	return (0);
