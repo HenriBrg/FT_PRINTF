@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:38:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 19:36:19 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 20:54:51 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,14 @@ static int	set_flags(t_printf *tab)
 
 static int	set_width(t_printf *tab)
 {
-	if (ft_isdigit(tab->format[tab->i]))
+	if (tab->format[tab->i] == '*')
+	{
+		tab->width = va_arg(tab->args, int);
+		tab->width_config = 1;
+		tab->i++;
+		return (1);
+	}
+	else if (ft_isdigit(tab->format[tab->i]))
 	{
 		while (tab->format[tab->i] == '0')
 			tab->i++;
@@ -66,6 +73,13 @@ static int	set_precision(t_printf *tab)
 	if (tab->format[tab->i] == '.')
 	{
 		tab->i++;
+		if (tab->format[tab->i] == '*')
+		{
+			tab->precision = va_arg(tab->args, int);
+			tab->precision_config = 1;
+			tab->i++;
+			return (1);
+		}
 		while (tab->format[tab->i] == '0')
 			tab->i++;
 		if (!ft_isdigit(tab->format[tab->i]))
@@ -113,7 +127,7 @@ static int	set_size(t_printf *tab)
 */
 
 void		set_config(t_printf *tab)
-{	
+{
 	if (set_flags(tab) == 1)
 		return ;
 	if (set_width(tab) == 1)

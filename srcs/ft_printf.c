@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 18:11:04 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 20:33:58 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void		dispatch(t_printf *tab)
 {
 	tab->i++;
 	while (tab->i < (int)ft_strlen(tab->format) &&
-		ft_strchr("-+ .0#0123456789hlzj", tab->format[tab->i]))
+		ft_strchr("-+ .0#0123456789hlzj*", tab->format[tab->i]))
 		set_config(tab);
 	control_config(tab, tab->format[tab->i]);
 	if (tab->format[tab->i] == '\0')

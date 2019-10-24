@@ -2,14 +2,24 @@
 
 int	main()
 {
+
+	printf("%.5p\n", 0);
+	ft_printf("%.5p\n", 0);
+
+	/*
 	char *s = "Hey";
 
-	//ft_printf("%*s\n", 10, s);
+	ft_printf("|%*s|\n", 10, s);
+	ft_printf("|%.*d|\n", 7, 12345);
+	ft_printf("|%*.d|\n", 7, 123456789);
 
-	printf("\n------\n\n");
 
-	printf("%*s\n", 10, s);
+	printf("------\n");
 
+	printf("|%*s|\n", 10, s);
+	printf("|%.*d|\n", 7, 12345);
+	printf("|%*.d|\n", 7, 123456789);
+	*/
 	return (0);
 }
 
