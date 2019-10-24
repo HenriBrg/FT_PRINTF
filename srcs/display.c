@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 20:55:01 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 21:59:17 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ static void		convert_pointer(t_printf *tab)
 
 	ptr = (unsigned long long int)va_arg(tab->args, void*);
 	tmp = ft_uintmaxt_toa_base("0123456789abcdef", ptr);
-	if (tmp[0] == '0')
-		tmp[0] = 0;
 	tab->output = ft_strjoin("0x", tmp);
 	free(tmp);
 }
