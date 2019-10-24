@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:38:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 16:57:21 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/24 19:36:19 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int	set_size(t_printf *tab)
 */
 
 void		set_config(t_printf *tab)
-{
+{	
 	if (set_flags(tab) == 1)
 		return ;
 	if (set_width(tab) == 1)

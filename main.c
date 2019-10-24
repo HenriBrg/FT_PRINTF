@@ -2,14 +2,13 @@
 
 int	main()
 {
+	char *s = "Hey";
 
-	ft_printf("%.0p, %.p\n", 0, 0);
-	ft_printf("%.p, %.0p\n", 0, 0);
+	//ft_printf("%*s\n", 10, s);
 
 	printf("\n------\n\n");
 
-	printf("%.0p, %.p\n", 0, 0);
-	printf("%.p, %.0p\n", 0, 0);
+	printf("%*s\n", 10, s);
 
 	return (0);
 }
