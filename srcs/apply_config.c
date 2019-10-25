@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:22:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 17:52:56 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/25 17:03:45 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*prefix(t_printf *tab, char c)
 	char	*prefix;
 
 	size = ft_strlen(tab->output);
-	if (ft_strchr("dDioOuUxX", c) == NULL)
+	if (ft_strchr("dDioOuUxXp", c) == NULL)
 		return (0);
 	if (size >= 1 && tab->output[0] == '-')
 		prefix = ft_strdup("-");
@@ -38,7 +38,7 @@ char	*prefix(t_printf *tab, char c)
 	else if (tab->hash && size >= 1 && (c == 'o' || c == 'O') &&
 									tab->output[0] == '0')
 		prefix = ft_strdup("0");
-	else if (tab->hash && size >= 2 && tab->output[0] == '0' &&
+	else if ((tab->hash || c == 'p') && size >= 2 && tab->output[0] == '0' &&
 									tab->output[1] == 'x')
 		prefix = ft_strdup("0x");
 	else if (tab->hash && size >= 2 && tab->output[0] == '0' &&
@@ -72,6 +72,7 @@ char	*prefix(t_printf *tab, char c)
 ** A la différence de la width, la précision limite le nombre de chiffres
 ** sortant (une sorte d'arrondi), et non le nombre total de caractère
 ** (ce qui fait que l'éventuel préfixe est exclu)
+** prx = size de strprefix s'il existe
 */
 
 void	apply_precision(t_printf *tab, char c)
@@ -82,7 +83,7 @@ void	apply_precision(t_printf *tab, char c)
 	char	*tmp;
 	char	*strprefix;
 
-	if (ft_strchr("dDioOuUxX", c) && tab->precision_config)
+	if (ft_strchr("dDioOuUxXp", c) && tab->precision_config)
 	{
 		strprefix = prefix(tab, c);
 		prx = (strprefix != 0) ? ft_strlen(strprefix) : 0;
@@ -195,7 +196,7 @@ void	apply_config(t_printf *tab)
 	char	*tmp;
 
 	apply_flags(tab, tab->format[tab->i]);
-	if (tab->precision_config && ft_strchr("dDiOouUxXsc", tab->format[tab->i]))
+	if (tab->precision_config && ft_strchr("dDiOouUxXscp", tab->format[tab->i]))
 		apply_precision(tab, tab->format[tab->i]);
 	if (tab->width_config == 1)
 		apply_width(tab);

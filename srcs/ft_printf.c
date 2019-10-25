@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 20:33:58 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/25 15:38:50 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,33 @@ static void		print(t_printf *tab)
 		tab->return_size += 1;
 }
 
+void show_config(t_printf *tab)
+{
+  printf("\n----------------------------------\n");
+  printf("Format    : %s\n", tab->format    );
+  printf("Format[i] : %c\n", tab->format[tab->i]);
+  printf("i         : %d\n", tab->i         );
+  printf("except    : %d\n", tab->except);
+
+  printf("minus     : %d\n", tab->minus     );
+  printf("plus      : %d\n", tab->plus      );
+  printf("space     : %d\n", tab->space     );
+  printf("zero      : %d\n", tab->zero      );
+  printf("hash      : %d\n", tab->hash      );
+  printf("h         : %d\n", tab->h         );
+  printf("hh        : %d\n", tab->hh        );
+  printf("l         : %d\n", tab->l         );
+  printf("ll        : %d\n", tab->ll        );
+  printf("j         : %d\n", tab->j         );
+  printf("z         : %d\n", tab->z         );
+  printf("width     : %d\n", tab->width     );
+  printf("widthConf : %d\n", tab->width_config     );
+  printf("precision : %d\n", tab->precision );
+  printf("preciConf : %d\n", tab->precision_config );
+  printf("\n----------------------------------\n");
+}
+
+
 static void		dispatch(t_printf *tab)
 {
 	tab->i++;
@@ -83,6 +110,7 @@ static void		dispatch(t_printf *tab)
 		return ;
 	if (ft_strchr("spdDioOuUxXcb%", tab->format[tab->i]))
 	{
+		//show_config(tab);
 		handle_display(tab, tab->format[tab->i]);
 		apply_config(tab);
 		print(tab);
