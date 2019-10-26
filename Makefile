@@ -1,8 +1,3 @@
-# Très bonne explication des Makefile :
-
-# 	https://stackoverflow.com/questions/3220277/what-do-the-makefile-symbols-and-mean
-# 	https://stackoverflow.com/questions/54854128/use-of-o-c-in-makefile
-
 NAME = libftprintf.a
 
 SRCS = srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/apply_config.c \
@@ -11,10 +6,6 @@ SRCS = srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/apply_config.c \
 OBJS = ${SRCS:.c=.o}
 
 CFLAGS = -Wall -Wextra -Werror
-
-# ifndef VERBOSE
-# .SILENT:
-# endif
 
 all: $(NAME)
 

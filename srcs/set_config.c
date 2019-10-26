@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:38:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 20:54:51 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/26 22:52:05 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,18 @@ static int	set_flags(t_printf *tab)
 
 static int	set_width(t_printf *tab)
 {
+	char *tmp;
+
+	tmp = NULL;
 	if (tab->format[tab->i] == '*')
 	{
 		tab->width = va_arg(tab->args, int);
 		tab->width_config = 1;
+		if (tab->width < 0)
+		{
+			tab->minus = 1;
+			tab->width = -tab->width;
+		}
 		tab->i++;
 		return (1);
 	}
@@ -51,7 +59,9 @@ static int	set_width(t_printf *tab)
 		while (tab->format[tab->i] == '0')
 			tab->i++;
 		tab->width = ft_atoi(&tab->format[tab->i]);
-		tab->i += ft_strlen(ft_itoa(tab->width));
+		tmp = ft_itoa(tab->width);
+		tab->i += ft_strlen(tmp);
+		free(tmp);
 		tab->width_config = 1;
 		return (1);
 	}
@@ -70,6 +80,9 @@ static int	set_width(t_printf *tab)
 
 static int	set_precision(t_printf *tab)
 {
+	char *tmp;
+
+	tmp = NULL;
 	if (tab->format[tab->i] == '.')
 	{
 		tab->i++;
@@ -77,6 +90,11 @@ static int	set_precision(t_printf *tab)
 		{
 			tab->precision = va_arg(tab->args, int);
 			tab->precision_config = 1;
+			if (tab->precision < 0)
+			{
+				tab->precision = 0;
+				tab->precision_config = 0;
+			}
 			tab->i++;
 			return (1);
 		}
@@ -89,7 +107,9 @@ static int	set_precision(t_printf *tab)
 			return (1);
 		}
 		tab->precision = ft_atoi(&tab->format[tab->i]);
-		tab->i += ft_strlen(ft_itoa(tab->precision));
+		tmp = ft_itoa(tab->precision);
+		tab->i += ft_strlen(tmp);
+		free(tmp);
 		tab->precision_config = 1;
 		return (1);
 	}

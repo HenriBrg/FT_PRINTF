@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/24 16:47:57 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 18:34:34 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/27 00:18:49 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <limits.h>
 # include <stdint.h>
 # include <stdio.h>
+# include <stdlib.h>
 
 # include "../libft/libft.h"
 

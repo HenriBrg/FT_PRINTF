@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:22:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/25 17:03:45 by hberger          ###   ########.fr       */
+/*   Updated: 2019/10/27 00:15:11 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	apply_precision(t_printf *tab, char c)
 		strprefix = prefix(tab, c);
 		prx = (strprefix != 0) ? ft_strlen(strprefix) : 0;
 		if ((i = -1) && tab->precision == 0 && ft_atoi(tab->output + prx) == 0)
-			if ((tab->output = ft_strjoin(strprefix, ft_strnew(1))) || 1)
+			if ((tab->output = ft_strjoin(strprefix, "")) || 1)
 				return ;
 		size = ft_strlen(tab->output);
 		tmp = ft_strnew(size + (tab->precision - size));
@@ -98,6 +98,7 @@ void	apply_precision(t_printf *tab, char c)
 		tab->output = ft_strjoin(tmp, tab->output + size);
 		if (strprefix != 0 && !(c == 'o' && tab->output[0] == '0'))
 			tab->output = ft_strjoin(strprefix, tab->output);
+		free(strprefix);
 		free(tmp);
 	}
 	else if (c == 's' && tab->precision_config == 1)
