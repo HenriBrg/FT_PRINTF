@@ -1,3 +1,6 @@
+# gcc -g -Iincludes/ -L. libft.a srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/apply_config.c s
+# rcs/utils.c leaks.c -o ftprintf && ./ftprintf
+
 NAME = libftprintf.a
 
 SRCS = srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/apply_config.c \
