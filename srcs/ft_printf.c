@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/03 14:38:09 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/03 15:23:42 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ static void		dispatch(t_printf *tab)
 		handle_display(tab, tab->format[tab->i]);
 		apply_config(tab);
 		print(tab);
+
+		free(tab->output);
+		
 		reset_config(tab);
 		tab->i++;
 	}
@@ -118,9 +121,9 @@ int				ft_printf(const char *format, ...)
 		return (-1);
 	tab->i = 0;
 	tab->return_size = 0;
+	reset_config(tab);
 	va_start(tab->args, format);
 	tab->format = (char*)format;
-	reset_config(tab);
 	while (tab->format[tab->i] != '\0')
 		if (tab->format[tab->i] == '%' && tab->format[tab->i + 1] == '%')
 		{
