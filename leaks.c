@@ -2,6 +2,7 @@
 
 int				main(void)
 {
+	/*
   ft_printf("%d\n", 1234567);
   ft_printf("\\n");
   ft_printf("%%\\n");
@@ -16,10 +17,14 @@ int				main(void)
   ft_printf("%p\\n", &ft_printf);
 
   ft_printf("%20.15d\\n", 54321);
-  ft_printf("%-10d\\n", 3);
   ft_printf("% d\\n", 3);
   ft_printf("%+d\\n", 3);
 
+  Until here leaks are absent */
+
+  // POSE PROBLEME : ft_printf("%-10d\\n", 3);
+
+  /*
   ft_printf("%010d\\n", 1);
   ft_printf("%hhd\\n", 0);
   ft_printf("%jd\\n", 9223372036854775807);
@@ -39,10 +44,16 @@ int				main(void)
 
   ft_printf("%s\\n", "test");
 
-  /*
+
   ft_printf("%s%s\\n", "test", "test");
   ft_printf("%s%s%s\\n", "test", "test", "test");
   */
   // while (1);
   return (0);
+}
+
+__attribute__((destructor))void destructeur()
+{
+	printf("destructor\n");
+	while(1);
 }

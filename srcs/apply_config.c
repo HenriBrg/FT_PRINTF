@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:22:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/27 00:15:11 by henri            ###   ########.fr       */
+/*   Updated: 2019/11/03 17:01:48 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	apply_precision(t_printf *tab, char c)
 	int		size;
 	int		prx;
 	char	*tmp;
+	char	*tmp2;
 	char	*strprefix;
 
 	if (ft_strchr("dDioOuUxXp", c) && tab->precision_config)
@@ -88,14 +89,25 @@ void	apply_precision(t_printf *tab, char c)
 		strprefix = prefix(tab, c);
 		prx = (strprefix != 0) ? ft_strlen(strprefix) : 0;
 		if ((i = -1) && tab->precision == 0 && ft_atoi(tab->output + prx) == 0)
+		{
+			free(tab->output);
 			if ((tab->output = ft_strjoin(strprefix, "")) || 1)
+			{
+				free(strprefix);
 				return ;
+			}
+		}
+
 		size = ft_strlen(tab->output);
 		tmp = ft_strnew(size + (tab->precision - size));
 		while (++i < tab->precision - size + prx)
 			tmp[i] = '0';
 		size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
-		tab->output = ft_strjoin(tmp, tab->output + size);
+		tmp2 = ft_strjoin(tmp, tab->output + size);
+		free(tab->output);
+		tab->output = ft_strdup(tmp2);
+		free(tmp2);
+		// tab->output = ft_strjoin(tmp, tab->output + size);
 		if (strprefix != 0 && !(c == 'o' && tab->output[0] == '0'))
 			tab->output = ft_strjoin(strprefix, tab->output);
 		free(strprefix);
@@ -195,7 +207,8 @@ void	apply_config(t_printf *tab)
 	int		place;
 	int		minplus;
 	char	*tmp;
-
+	char	*tmp2;
+	
 	apply_flags(tab, tab->format[tab->i]);
 	if (tab->precision_config && ft_strchr("dDiOouUxXscp", tab->format[tab->i]))
 		apply_precision(tab, tab->format[tab->i]);
@@ -212,7 +225,11 @@ void	apply_config(t_printf *tab)
 		while (tab->output[++i] == ' ')
 			place++;
 		tmp = ft_memset(ft_strnew(place + 1), ' ', place);
-		tab->output = ft_strjoin(tab->output + place - minplus, tmp + minplus);
+		tmp2 = ft_strjoin(tab->output + place - minplus, tmp + minplus);
 		free(tmp);
+		free(tab->output);
+		tab->output = ft_strdup(tmp2);
+		free(tmp2);
+		//tab->output = ft_strjoin(tab->output + place - minplus, tmp + minplus);
 	}
 }
