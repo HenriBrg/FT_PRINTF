@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/03 15:23:42 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/03 19:36:19 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static void		print(t_printf *tab)
 	char	null_arg_char_exception;
 
 	null_arg_char_exception = 0;
-	if (tab->except == 1 && (tab->precision_config == 0 && tab->width_config == 0))
+	if (tab->except == 1 && (tab->precision_config == 0 &&
+								tab->width_config == 0))
 		write(1, &null_arg_char_exception, 1);
 	ft_putstr_fd(tab->output, 1);
 	if (tab->except == 2)
@@ -86,9 +87,7 @@ static void		dispatch(t_printf *tab)
 		handle_display(tab, tab->format[tab->i]);
 		apply_config(tab);
 		print(tab);
-
 		free(tab->output);
-		
 		reset_config(tab);
 		tab->i++;
 	}

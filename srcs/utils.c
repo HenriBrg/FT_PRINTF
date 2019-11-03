@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/24 18:07:59 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/03 15:29:33 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/03 18:55:59 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,9 @@
 
 /*
 ** reset_config() intervient pour chaque conversion (c.a.d occurence de %)
-**
-**
-** if (tab->output)
-** {
-** // POURQUOI CA AFFICHE NIMPORTEQUOI AU PREMIER APPEL ? ^Y^Q^]M-^R��^]$
-** 	printf("----------->%s\n", tab->output);
-** 	//free(tab->output);
-** }
-** Impossible de free tab->output ici, why ?
 */
 
-void		reset_config(t_printf *tab)
+void	reset_config(t_printf *tab)
 {
 	tab->output = 0;
 	tab->except = 0;
@@ -44,4 +35,21 @@ void		reset_config(t_printf *tab)
 	tab->precision = 0;
 	tab->width_config = 0;
 	tab->precision_config = 0;
+}
+
+void	finish_precision(char *taboutput, char *tmp, int size)
+{
+	char	*tmp2;
+
+	tmp2 = ft_strjoin(tmp, taboutput + size);
+	free(taboutput);
+	taboutput = ft_strdup(tmp2);
+	free(tmp2);
+}
+
+void	zero_precision_cut(t_printf *tab, char *strprefix)
+{
+	free(tab->output);
+	if ((tab->output = ft_strjoin(strprefix, "")) || 1)
+		return (free(strprefix));
 }

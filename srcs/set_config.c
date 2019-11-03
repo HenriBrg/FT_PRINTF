@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:38:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/26 22:52:05 by henri            ###   ########.fr       */
+/*   Updated: 2019/11/03 19:22:21 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ static int	set_width(t_printf *tab)
 			tab->minus = 1;
 			tab->width = -tab->width;
 		}
-		tab->i++;
-		return (1);
+		return ((tab->i += 1));
 	}
 	else if (ft_isdigit(tab->format[tab->i]))
 	{
@@ -62,8 +61,7 @@ static int	set_width(t_printf *tab)
 		tmp = ft_itoa(tab->width);
 		tab->i += ft_strlen(tmp);
 		free(tmp);
-		tab->width_config = 1;
-		return (1);
+		return ((tab->width_config = 1));
 	}
 	return (0);
 }
@@ -78,11 +76,8 @@ static int	set_width(t_printf *tab)
 **  i serait incrémenté seulement de 1 car strlen atoi (09) = 1
 */
 
-static int	set_precision(t_printf *tab)
+static int	set_precision(t_printf *tab, char *tmp)
 {
-	char *tmp;
-
-	tmp = NULL;
 	if (tab->format[tab->i] == '.')
 	{
 		tab->i++;
@@ -90,28 +85,22 @@ static int	set_precision(t_printf *tab)
 		{
 			tab->precision = va_arg(tab->args, int);
 			tab->precision_config = 1;
-			if (tab->precision < 0)
-			{
-				tab->precision = 0;
+			if (tab->precision < 0 && !(tab->precision = 0))
 				tab->precision_config = 0;
-			}
-			tab->i++;
-			return (1);
+			return ((tab->i += 1));
 		}
 		while (tab->format[tab->i] == '0')
 			tab->i++;
 		if (!ft_isdigit(tab->format[tab->i]))
 		{
-			tab->precision_config = 1;
 			tab->precision = 0;
-			return (1);
+			return ((tab->precision_config = 1));
 		}
 		tab->precision = ft_atoi(&tab->format[tab->i]);
 		tmp = ft_itoa(tab->precision);
 		tab->i += ft_strlen(tmp);
 		free(tmp);
-		tab->precision_config = 1;
-		return (1);
+		return ((tab->precision_config = 1));
 	}
 	return (0);
 }
@@ -148,11 +137,14 @@ static int	set_size(t_printf *tab)
 
 void		set_config(t_printf *tab)
 {
+	char	*tmp;
+
+	tmp = NULL;
 	if (set_flags(tab) == 1)
 		return ;
 	if (set_width(tab) == 1)
 		return ;
-	if (set_precision(tab) == 1)
+	if (set_precision(tab, tmp) == 1)
 		return ;
 	if (set_size(tab) == 1)
 		return ;
