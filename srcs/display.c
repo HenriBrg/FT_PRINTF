@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:32:05 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/27 00:19:51 by henri            ###   ########.fr       */
+/*   Updated: 2019/11/03 14:04:41 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 /*
 ** convert_int() intervient pour les conversion d'int signés
 ** intmax_toa_base gère tous les types de nombres signés
+** ULTRA ETRANGE LE DEBUG DE LA LEAKS L41 42 43
 */
 
 static void		convert_int(t_printf *tab)
 {
 	intmax_t	n;
+	//char		*tmp;
 
 	n = 0;
 	if (tab->h)
@@ -36,7 +38,12 @@ static void		convert_int(t_printf *tab)
 		n = va_arg(tab->args, ssize_t);
 	else
 		n = va_arg(tab->args, int);
+	
 	tab->output = ft_intmaxt_toa_base("0123456789", n);
+
+	// tmp = ft_intmaxt_toa_base("0123456789", n);
+	// tab->output = tmp;
+	// free(tmp);
 }
 
 /*

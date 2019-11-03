@@ -37,6 +37,6 @@ int				main(void)
   ft_printf("%s%s\\n", "test", "test");
   ft_printf("%s%s%s\\n", "test", "test", "test");
   */
-  while (1);
+  // while (1);
   return (0);
 }
