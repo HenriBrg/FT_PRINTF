@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/24 18:07:59 by hberger           #+#    #+#             */
-/*   Updated: 2019/10/24 18:16:19 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/03 14:36:36 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 
 void		reset_config(t_printf *tab)
 {
+	if (tab->output)
+		free(tab->output);
 	tab->output = 0;
 	tab->except = 0;
 	tab->minus = 0;

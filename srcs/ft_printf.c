@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:50:42 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/03 13:50:45 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/03 14:38:09 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ static int		end(t_printf *tab)
 	int	tmp;
 
 	tmp = tab->return_size;
-	if (tab->output)
-		free(tab->output);
 	free(tab);
 	return (tmp);
 }
