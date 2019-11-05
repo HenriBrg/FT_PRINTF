@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/24 16:47:57 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/05 14:57:11 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/05 15:41:12 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 # define FT_PRINTF_H
 
 # include <stdarg.h>
-# include <limits.h>
 # include <stdint.h>
-# include <stdio.h>
 # include <stdlib.h>
 
 # include "../libft/libft.h"
