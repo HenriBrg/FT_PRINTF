@@ -1,5 +1,14 @@
-# gcc -g -Iincludes/ -L. libft.a srcs/ft_printf.c srcs/set_config.c srcs/display.c srcs/apply_config.c s
-# rcs/utils.c leaks.c -o ftprintf && ./ftprintf
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: hberger <hberger@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2019/11/05 15:03:06 by hberger           #+#    #+#              #
+#    Updated: 2019/11/05 15:03:07 by hberger          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 NAME = libftprintf.a
 

@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 18:22:34 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/03 18:54:25 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/05 14:58:01 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void	apply_precision(t_printf *tab, char c)
 		while (++i < tab->precision - size + prx)
 			tmp[i] = '0';
 		size = (strprefix != 0) ? ft_strlen(strprefix) : 0;
-		finish_precision(tab->output, tmp, size);
+		finish_precision(tab, tmp, size);
 		if (strprefix != 0 && !(c == 'o' && tab->output[0] == '0'))
-			tab->output = ft_strjoin(strprefix, tab->output);
+			return (except_case_preci(tab, tmp, strprefix));
 		free(strprefix);
 		free(tmp);
 	}

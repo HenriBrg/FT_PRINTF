@@ -6,7 +6,7 @@
 /*   By: hberger <hberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/24 18:07:59 by hberger           #+#    #+#             */
-/*   Updated: 2019/11/03 18:55:59 by hberger          ###   ########.fr       */
+/*   Updated: 2019/11/05 14:57:21 by hberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	reset_config(t_printf *tab)
 	tab->precision_config = 0;
 }
 
-void	finish_precision(char *taboutput, char *tmp, int size)
+void	finish_precision(t_printf *tab, char *tmp, int size)
 {
 	char	*tmp2;
 
-	tmp2 = ft_strjoin(tmp, taboutput + size);
-	free(taboutput);
-	taboutput = ft_strdup(tmp2);
+	tmp2 = ft_strjoin(tmp, tab->output + size);
+	free(tab->output);
+	tab->output = ft_strdup(tmp2);
 	free(tmp2);
 }
 
@@ -52,4 +52,13 @@ void	zero_precision_cut(t_printf *tab, char *strprefix)
 	free(tab->output);
 	if ((tab->output = ft_strjoin(strprefix, "")) || 1)
 		return (free(strprefix));
+}
+
+void	except_case_preci(t_printf *tab, char *tmp, char *strprefix)
+{
+	free(tmp);
+	tmp = ft_strjoin(strprefix, tab->output);
+	tab->output = ft_strdup(tmp);
+	free(tmp);
+	free(strprefix);
 }
